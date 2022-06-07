@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
   </div>
 </template>
@@ -12,12 +11,30 @@ export default {
 </script>
 
 <style>
+html,body{
+  margin: 0;
+  padding: 0;
+  
+}
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin: 0;
+  padding: 0;
+}
+/*-------滚动条整体样式----*/
+::-webkit-scrollbar {
+  width:5px;
+  height:10px;
+}
+  /*滚动条里面小方块样式*/
+::-webkit-scrollbar-thumb {
+  border-radius:100px;
+  -webkit-box-shadow:inset 0 0 5px rgb(255, 255, 255);
+  background:rgb(128, 141, 255);
+}
+  /*滚动条里面轨道样式*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow:inset 0 0 5px rgba(0,0,0,0.2);
+  border-radius:0;
+  background:rgb(255, 255, 255);
 }
 </style>
