@@ -96,14 +96,14 @@ export default {
     justify-content: space-between;
     // align-items: center;
     .right{
-      width: 15%;
+      width: 25%;
       // background: rgb(227, 255, 227);
       margin: 0 10px;
       border: 1px dotted #9dbaf278;
       padding: 20px;
     }
     .middle{
-      width: 65%;
+      width: 60%;
       // background: rgb(255, 254, 222);
       
       border: 1px dotted #9dbaf278;
@@ -111,7 +111,7 @@ export default {
       margin: 0 20px;
     }
     .left{
-      width: 20%;
+      width: 15%;
       // background: #d8faff;
       border: 1px dotted #9dbaf278;
       padding: 20px;
