@@ -4,7 +4,7 @@
       <div class="header_title">
         <div class="logo">logo</div>
         <div class="login">
-          <el-button round type="primary">点此登录</el-button>
+          <el-button round type="primary" @click="login">点此登录</el-button>
           <el-button round>我要注册</el-button>
         </div>
       </div>
@@ -36,7 +36,11 @@ export default {
   },
   watch: {},
   computed: {},
-  methods: {},
+  methods: {
+    login(){
+      this.$router.push('/login')
+    },
+  },
   created() {},
   mounted() {}
 };
