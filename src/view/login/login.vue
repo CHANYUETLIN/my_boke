@@ -9,10 +9,11 @@
 					<div class="content">
 						<div class="input">
 							<p>UserName:</p>
-							<input type="text" :value="UserName" class="username">
+							<input type="text" v-model="UserName" class="username">
 							<p>Password:</p>
-							<input type="password" :value="Password" class="password">
+							<input type="password" v-model="Password" class="password">
 						</div>
+						<div class="btn_login" @click="login">login</div>
 						<div class="toOtherPath">
 							<div>New user: <span>Sign Up</span></div>
 							<div>Forget Password?</div>
@@ -40,7 +41,24 @@ export default {
   },
   watch: {},
   computed: {},
-  methods: {},
+  methods: {
+		login(){
+			console.log(this.UserName,'username')
+			this.$axios.get(`/users/login?username=${this.UserName}&password=${this.Password}`).then(res=>{
+				console.log(res,'res')
+				if(res.data.code != '200'){
+					this.$notify.error({
+						title: '错误',
+						message: res.data.msg
+					});
+				}else{
+					this.$message.success('登陆成功');
+					// 回到首页
+					this.$router.push('/')
+				}
+			})
+		}
+	},
   created() {},
   mounted() {}
 };
@@ -118,6 +136,30 @@ export default {
 							padding:0 10px;
 							font-size: 16px;
 						}
+					}
+					.btn_login{
+						cursor: pointer;
+						width:70px;
+						height:30px;
+						border-radius: 6px;
+						text-align: center;
+						line-height: 30px;
+						font-size: 14	px;
+						font-weight: 600;
+						color: #fff;
+						background:#c9aee9;
+					}
+					.btn_loginClick{
+						cursor: pointer;
+						width:70px;
+						height:30px;
+						border-radius: 6px;
+						text-align: center;
+						line-height: 30px;
+						font-size: 14	px;
+						font-weight: 600;
+						color: #fff;
+						background:#a690c1;
 					}
 					.toOtherPath{
 						width: 100%;

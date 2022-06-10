@@ -7,9 +7,17 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
+import axios from 'axios'
+
+
 
 Vue.use(iView)
 Vue.use(ElementUI);
+
+axios.defaults.baseURL = 'http://localhost:8888'
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+Vue.prototype.$axios = axios
+
 
 Vue.config.productionTip = false
 
