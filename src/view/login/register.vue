@@ -5,7 +5,7 @@
 			<div class="img"></div>
 			<div class="contain">
 				<div class="login_contain">
-					<div class="title">Sign in</div>
+					<div class="title">Sign Up</div>
 					<div class="content">
 						<div class="input">
 							<p>UserName:</p>
@@ -13,9 +13,9 @@
 							<p>Password:</p>
 							<input type="password" v-model="Password" class="password">
 						</div>
-						<div class="btn_login" @click="login">login</div>
+						<div class="btn_login" @click="register">register</div>
 						<div class="toOtherPath">
-							<div>New user: <span @click="toRegister">Sign Up</span></div>
+							<div>Existing account: <span @click="toLogin">Sign In</span></div>
 							<div>Forget Password?</div>
 						</div>
 					</div>
@@ -31,6 +31,7 @@
 
 <script>
 export default {
+  name:"register",
   components: {},
   props: {},
   data() {
@@ -42,27 +43,31 @@ export default {
   watch: {},
   computed: {},
   methods: {
-		login(){
-			console.log(this.UserName,'username')
-			this.$axios.get(`/users/login?username=${this.UserName}&password=${this.Password}`).then(res=>{
-				console.log(res,'res')
-				if(res.data.code != '200'){
+		register(){
+      let params = {
+        username:this.UserName,
+        password:this.Password
+      }
+      this.$axios.post('/regist/register',params).then(res=>{
+        if(res.data.code != '200'){
 					this.$notify.error({
 						title: '错误',
 						message: res.data.msg
 					});
 				}else{
-					this.$message.success('登陆成功');
+					this.$message.success('注册成功');
 					// 回到首页
 					this.$router.push('/')
 				}
-			})
-		},
-		toRegister(){
-			this.$router.push({name:"register",path:"/register"})
-		}
+      })
+    },
+    toLogin(){
+      this.$router.push('/login')
+    },
 	},
-  created() {},
+  created() {
+    console.log(123456)
+  },
   mounted() {}
 };
 </script>

@@ -23,6 +23,7 @@ app.all("*",function(request,response,next){
 // 加载路由文件（请求接口设计就在）
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var registerRouter = require('./routes/register')
 
 // view engine setup 设置模板引擎
 app.set('views', path.join(__dirname, 'views'));
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/regist',registerRouter)
 
 
 
