@@ -3,14 +3,28 @@
     <div class="header">
       <div class="header_title">
         <div class="logo">logo</div>
-        <div class="login">
-          <el-button round type="primary" @click="login">点此登录</el-button>
-          <el-button round>我要注册</el-button>
+        <div class="login" v-show="!showlogin">
+          <!-- <el-button round type="primary" @click="login" size="mini">点此登录</el-button> -->
+          <cButton :title="'登陆'" @click="login"></cButton>
+          <cButton :title="'注册'" @click="register"></cButton>
+        </div>
+        <div v-show="showlogin" class="showlogin">
+          <p >hello : <span @mousemove="mousemove">{{loginInfo.UserName}}</span></p>
+          <i class="el-icon-caret-bottom"></i>
+          <div class="headphoto"><img src="../../assets/image/touxiang.png" alt=""></div>
+          <div class="hoverlogin" ref="hoverlogin"  @mouseleave="mouseleave">
+            <ul>
+              <li @click="userInfo"><i class="el-icon-user"></i> 用户信息</li>
+              <li><i class="el-icon-s-operation"></i> 开发管理</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
     <div class="content">
-      <div class="head_portrait">头像</div>
+      <div class="head_portrait">
+        <img v-show="showlogin" src="../../assets/image/touxiang.png" alt="">
+      </div>
       <div class="contain">
         <div class="right">
           <el-carousel :interval="2000" type="card" height="200px">
@@ -32,6 +46,8 @@ export default {
   props: {},
   data() {
     return {
+      showlogin:false, // true为已登录状态，false是未登录状态
+      loginInfo:{},
     };
   },
   watch: {},
@@ -40,8 +56,31 @@ export default {
     login(){
       this.$router.push('/login')
     },
+    register(){
+      this.$router.push('/register')
+    },
+    // 鼠标移入
+    mousemove(){
+      this.$refs.hoverlogin.style = "height:200px;transition:0.24s"
+    },
+    // 鼠标移出
+    mouseleave(){
+      this.$refs.hoverlogin.style = "height:0px;"
+    },
+    // 账户信息
+    userInfo(){
+      this.$router.push("/userInfo")
+    },
   },
-  created() {},
+  created() {
+    // 判断是否是登陆状态
+    this.loginInfo = JSON.parse(sessionStorage.getItem('login'))
+    if(this.loginInfo.UserName){
+      this.showlogin = true
+    }else{
+      this.showlogin = false
+    }
+  },
   mounted() {}
 };
 </script>
@@ -57,7 +96,7 @@ export default {
   border-bottom-right-radius:10px;
   box-shadow: 0px 5px 20px #9dbaf2;
   .header_title{
-    height: 10px;
+    height: 50px;
     background: #ffffff;
     display: flex;
     justify-content: space-between;
@@ -65,13 +104,68 @@ export default {
     padding: 5px 40px;
     border-bottom-left-radius:10px;
     border-bottom-right-radius:10px;
-    opacity: 0;
+    // opacity: 0;
 
     .login{
-      width: 300px;
+      width: 250px;
       display: flex;
       justify-content: space-around
     }
+    .showlogin{
+      width: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      position: relative;
+      p{
+        font-size: 14px;
+        color: rgb(71, 71, 71);
+        span{
+          font-size: 16px;
+          cursor: pointer;
+          color: rgb(144, 49, 222);
+        }
+      }
+      .hoverlogin{
+        width: 120px;
+        height: 0px;
+        overflow: hidden;
+        position: absolute;
+        top: 36px;
+        right: 30px;
+        background: #fff;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        ul{
+          width: 100%;
+          li{
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor:pointer;
+            width: 100%;
+            i{
+              margin-right: 5px;
+            }
+          }
+        }
+      }
+      .headphoto{
+        width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-left: 10px;
+        img{
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+    
   }
   .header_title:hover{
     height: 50px;
@@ -88,9 +182,14 @@ export default {
     height: 100px;
     background: rgb(255, 213, 205);
     border-radius: 10px;
+    overflow: hidden;
     position: absolute;
     left: 200px;
     top: -50px;
+    img{
+      width: 100px;
+      height: 100px;
+    }
   }
   .contain{
     height: 600px;

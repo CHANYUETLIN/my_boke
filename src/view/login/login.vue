@@ -37,6 +37,7 @@ export default {
 	return {
 		UserName:'',
 		Password:'',
+		loginInfo:{},
 	};
   },
   watch: {},
@@ -45,7 +46,6 @@ export default {
 		login(){
 			console.log(this.UserName,'username')
 			this.$axios.get(`/users/login?username=${this.UserName}&password=${this.Password}`).then(res=>{
-				console.log(res,'res')
 				if(res.data.code != '200'){
 					this.$notify.error({
 						title: '错误',
@@ -53,6 +53,9 @@ export default {
 					});
 				}else{
 					this.$message.success('登陆成功');
+					// 保存登陆用户信息sessionStorage
+					this.loginInfo.UserName = this.UserName
+					sessionStorage.setItem('login',JSON.stringify(this.loginInfo))
 					// 回到首页
 					this.$router.push('/')
 				}

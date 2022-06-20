@@ -14,11 +14,15 @@ export default {
 html,body{
   margin: 0;
   padding: 0;
+  font-size: 14px;
   
 }
 #app {
   margin: 0;
   padding: 0;
+}
+ul,li{
+  list-style: none;
 }
 /*-------滚动条整体样式----*/
 ::-webkit-scrollbar {

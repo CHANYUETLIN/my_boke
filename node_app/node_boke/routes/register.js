@@ -46,7 +46,7 @@ router.post("/register",(req,res)=>{
                     msg:'注册成功'
                   })
                 }
-                connection.end()
+                // connection.end()
                 // connection.end(function(err) {
                 //   if (err) {
                 //       console.log('关闭数据库连接失败！')
