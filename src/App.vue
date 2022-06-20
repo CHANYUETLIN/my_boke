@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
+    <!-- git config --global http.sslVerify "false" -->
   </div>
 </template>
 
