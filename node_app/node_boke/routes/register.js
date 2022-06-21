@@ -3,11 +3,10 @@ var router = express.Router();
 var connection = require('../Dao/dbUtil')
 // 下载uuid npm install uuid --save 用来生成唯一名字
 const uuid = require('uuid');
-// code:200成功，201查询成功但非自己想要的数据，
+// code:200成功，201查询成功但非自己想要的数据，400错误查询或更新
 
 // 用户注册（注册了才能评论 在数据库中先查询是否有相同名字的用户名后，再进行注册）
 router.post("/register",(req,res)=>{
-  // console.log(req.body)
   let data = req.body
   // if(req.body.username == ""){
   if(!data.username || !data.password){
@@ -36,7 +35,7 @@ router.post("/register",(req,res)=>{
                 msg:"已有重复用户名，请更换用户名进行注册"
               })
             }else{
-              connection.query(`INSERT INTO user(id,username,password,dechema) VALUES('${data.id}','${data.username}','${data.password}','${data.dechema}')`,function(err,data){
+              connection.query(`INSERT INTO user(id,username,password,dechema,sex) VALUES('${data.id}','${data.username}','${data.password}','${data.dechema}',0)`,function(err,data){
                 if(err){
                   console.log('插入数据失败',err)
                 } else {

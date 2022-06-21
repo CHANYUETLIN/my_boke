@@ -4,28 +4,40 @@
     <div class="user">
       <div class="list">
         <div class="headphoto">
-          <img src="../../assets/image/touxiang.png" alt="">
+          <!-- <img src="../../assets/image/touxiang.png" alt=""> -->
+          <el-upload
+            class="avatar-uploader"
+            action="http://localhost:8888/users/InsertheadImg"
+            :show-file-list="false"
+            :http-request="uploadImg"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </div>
         <ul>
           <li :class="active == index ? 'activelist':'noneactivelist'" v-for="(item,index) in userlist" :key="index" @click="chooseList(index)">{{item}}</li>
         </ul>
       </div>
       <div class="content">
-        <div v-show="active == 0"></div>
+        <div v-show="active == 0" style="width:100%;height:100%">
+          <my-index-info></my-index-info>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ctab from '../../components/ctab.vue'
+import myIndexInfo from './components/myIndexInfo.vue'
 export default {
-  components: { ctab },
+  components: { myIndexInfo },
   data() {
     return {
       breadcrumb:[{name:'用户中心',path:'/'}],
       userlist:["个人资料","我的文章"],
       active:0,
+      imageUrl: ""
     }
   },
   mounted(){
@@ -37,7 +49,21 @@ export default {
   methods:{
     chooseList(index){
       this.active = index
-
+    },
+    uploadImg(f){
+      console.log(f,'f');
+      let formData = new FormData();
+      let username = JSON.parse(sessionStorage.getItem('login')).UserName
+      formData.append("file", f.file);
+      formData.append('username',username)
+      this.$axios({
+        method: "post",
+        url: "http://localhost:8888/users/InsertheadImg",
+        data: formData
+      }).then(res => {
+        //上传成功之后 显示图片
+        this.imageUrl = res.data.imgUrl ;
+      });
     },
   },
 }
@@ -83,7 +109,7 @@ export default {
       align-items: center;
       margin-top: 30px;
       li{
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         font-weight: 600;
         cursor: pointer;
       }
@@ -98,7 +124,32 @@ export default {
   .content{
     width: 85%;
     height: 100%;
-    background: rgb(233, 255, 233);
+    // background: rgb(233, 255, 233);
+    background: #fff;
   }
 }
+
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

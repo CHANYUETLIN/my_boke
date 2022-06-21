@@ -2,13 +2,15 @@
   <div>
     <div class="header">
       <div class="header_title">
-        <div class="logo">logo</div>
-        <div class="login" v-show="!showlogin">
+        <div class="logo">
+          <img src="../../assets/image/logo.png" alt="">
+        </div>
+        <div class="login" v-if="!showlogin">
           <!-- <el-button round type="primary" @click="login" size="mini">点此登录</el-button> -->
           <cButton :title="'登陆'" @click="login"></cButton>
           <cButton :title="'注册'" @click="register"></cButton>
         </div>
-        <div v-show="showlogin" class="showlogin">
+        <div v-if="showlogin" class="showlogin">
           <p >hello : <span @mousemove="mousemove">{{loginInfo.UserName}}</span></p>
           <i class="el-icon-caret-bottom"></i>
           <div class="headphoto"><img src="../../assets/image/touxiang.png" alt=""></div>
@@ -16,14 +18,15 @@
             <ul>
               <li @click="userInfo"><i class="el-icon-user"></i> 用户信息</li>
               <li><i class="el-icon-s-operation"></i> 开发管理</li>
+              <li @click="exitLogin"><i class="el-icon-s-tools"></i> 退出登陆</li>
             </ul>
           </div>
         </div>
       </div>
     </div>
     <div class="content">
-      <div class="head_portrait">
-        <img v-show="showlogin" src="../../assets/image/touxiang.png" alt="">
+      <div class="head_portrait" v-if="showlogin">
+        <img src="../../assets/image/touxiang.png" alt="">
       </div>
       <div class="contain">
         <div class="right">
@@ -50,7 +53,9 @@ export default {
       loginInfo:{},
     };
   },
-  watch: {},
+  watch: {
+    
+  },
   computed: {},
   methods: {
     login(){
@@ -71,15 +76,24 @@ export default {
     userInfo(){
       this.$router.push("/userInfo")
     },
+    // 退出登陆
+    exitLogin(){
+      sessionStorage.clear();
+      this.$router.go(0)
+      this.showLogin()
+    },
+    // 判断是否是登陆状态 从而更改首页样式
+    showLogin(){
+      this.loginInfo = JSON.parse(sessionStorage.getItem('login'))
+      if(this.loginInfo && this.loginInfo.UserName){
+        this.showlogin = true
+      }else{
+        this.showlogin = false
+      }
+    },
   },
   created() {
-    // 判断是否是登陆状态
-    this.loginInfo = JSON.parse(sessionStorage.getItem('login'))
-    if(this.loginInfo.UserName){
-      this.showlogin = true
-    }else{
-      this.showlogin = false
-    }
+    this.showLogin()
   },
   mounted() {}
 };
@@ -105,7 +119,11 @@ export default {
     border-bottom-left-radius:10px;
     border-bottom-right-radius:10px;
     // opacity: 0;
-
+    .logo{
+      img{
+        width: 150px;
+      }
+    }
     .login{
       width: 250px;
       display: flex;
@@ -123,7 +141,7 @@ export default {
         span{
           font-size: 16px;
           cursor: pointer;
-          color: rgb(144, 49, 222);
+          color: #cc8eff;
         }
       }
       .hoverlogin{
@@ -192,7 +210,7 @@ export default {
     }
   }
   .contain{
-    height: 600px;
+    height: 800px;
     // background: rgb(213, 255, 227);
     padding: 40px 40px 30px 40px;
     display: flex;
