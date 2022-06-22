@@ -34,7 +34,7 @@ export default {
   components: { myIndexInfo },
   data() {
     return {
-      breadcrumb:[{name:'用户中心',path:'/'}],
+      breadcrumb:[{name:'用户中心',path:''}],
       userlist:["个人资料","我的文章"],
       active:0,
       imageUrl: ""
@@ -46,14 +46,28 @@ export default {
   computed:{
 
   },
+  created(){
+    this.getUserData()
+  },
   methods:{
     chooseList(index){
       this.active = index
     },
+    // 获取当前登陆用户头像
+    getUserData(){
+      let login = JSON.parse(sessionStorage.getItem('login'))
+      if(!login &&  !login.username) return ''
+      let params = {
+        username:login.username
+      }
+      this.$axios.post('/users/QueryUserInfo',params).then(res=>{
+        this.imageUrl = res.data.result[0].imgurl
+      })
+    },
+    // 上传头像或更改头像
     uploadImg(f){
-      console.log(f,'f');
       let formData = new FormData();
-      let username = JSON.parse(sessionStorage.getItem('login')).UserName
+      let username = JSON.parse(sessionStorage.getItem('login')).username
       formData.append("file", f.file);
       formData.append('username',username)
       this.$axios({
@@ -62,7 +76,7 @@ export default {
         data: formData
       }).then(res => {
         //上传成功之后 显示图片
-        this.imageUrl = res.data.imgUrl ;
+        this.imageUrl = res.data.result[0].imgurl ;
       });
     },
   },
@@ -142,14 +156,16 @@ export default {
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;    
+    background: #fff;
+    border-radius: 50%;
   }
   .avatar {
-    width: 178px;
-    height: 178px;
+    width: 100px;
+    height: 100px;
     display: block;
   }
 </style>

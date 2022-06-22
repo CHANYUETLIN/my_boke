@@ -92,10 +92,11 @@ router.post('/InsertheadImg',(req,res)=>{
     myResult.result[0].code = "200"; 
     myResult.result[0].message="success"; 
     console.log(fields,files,'files')
-    myResult.result[0].imgUrl='http://localhost:8888/'+files.file[0].path;
-    var url='http://localhost:8888/'+files.file[0].path; 
+    let url='http://localhost:8888/'+files.file[0].path; 
+    let imgurl = url.replace(url.substring(22,36),'') // http://localhost:8888/frocnecRE047_pXgBQt499GC.png url
+    myResult.result[0].imgurl=imgurl;
     connection.getConnection((err)=>{
-      let Sql = `UPDATE user SET imgurl='${url}' WHERE username='${fields.username[0]}'`; //增
+      let Sql = `UPDATE user SET imgurl='${imgurl}' WHERE username='${fields.username[0]}'`; //增
       connection.query(Sql,function (err, res1) {
         if(err){
           console.log('[INSERT ERROR] - ', err.message); 

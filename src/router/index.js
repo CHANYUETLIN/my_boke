@@ -4,6 +4,7 @@ import home from '../view/home/homepage.vue'
 import login from '../view/login/login.vue'
 import register from '../view/login/register.vue'
 import userInfo from '../view/login/userInfo.vue'
+import development from '../view/backStage/development.vue'
 
 
 Vue.use(Router)
@@ -29,6 +30,12 @@ export default new Router({
       path: '/userInfo',
       name: 'userInfo',
       component: userInfo
+    },
+    {
+      path: '/development',
+      name: 'development',
+      component: development,
+      
     },
   ]
 })

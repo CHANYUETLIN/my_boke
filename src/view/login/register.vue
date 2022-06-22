@@ -8,8 +8,8 @@
 					<div class="title">Sign Up</div>
 					<div class="content">
 						<div class="input">
-							<p>UserName:</p>
-							<input type="text" v-model="UserName" class="username">
+							<p>username:</p>
+							<input type="text" v-model="username" class="username">
 							<p>Password:</p>
 							<input type="password" v-model="Password" class="password">
 						</div>
@@ -36,7 +36,7 @@ export default {
   props: {},
   data() {
 	return {
-		UserName:'',
+		username:'',
 		Password:'',
 	};
   },
@@ -45,7 +45,7 @@ export default {
   methods: {
 		register(){
       let params = {
-        username:this.UserName,
+        username:this.username,
         password:this.Password
       }
       this.$axios.post('/regist/register',params).then(res=>{

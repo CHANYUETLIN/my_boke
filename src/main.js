@@ -10,6 +10,7 @@ import 'iview/dist/styles/iview.css'
 import axios from 'axios'
 import cButton from './components/button';
 import ctab from './components/ctab';
+import dataBind from './common/dataBind'
 
 
 
@@ -18,6 +19,7 @@ Vue.use(ElementUI);
 Vue.component('cButton',cButton)
 Vue.component('ctab',ctab)
 
+Vue.prototype.$dataBind = dataBind
 
 // ***********aixos拦截器******************************
  

@@ -37,6 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // 静态资源解析
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public/images')); // 设置静态图片访问的路径
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

@@ -8,8 +8,8 @@
 					<div class="title">Sign in</div>
 					<div class="content">
 						<div class="input">
-							<p>UserName:</p>
-							<input type="text" v-model="UserName" class="username">
+							<p>username:</p>
+							<input type="text" v-model="username" class="username">
 							<p>Password:</p>
 							<input type="password" v-model="Password" class="password">
 						</div>
@@ -35,7 +35,7 @@ export default {
   props: {},
   data() {
 	return {
-		UserName:'',
+		username:'',
 		Password:'',
 		loginInfo:{},
 	};
@@ -44,8 +44,7 @@ export default {
   computed: {},
   methods: {
 		login(){
-			console.log(this.UserName,'username')
-			this.$axios.get(`/users/login?username=${this.UserName}&password=${this.Password}`).then(res=>{
+			this.$axios.get(`/users/login?username=${this.username}&password=${this.Password}`).then(res=>{
 				if(res.data.code != '200'){
 					this.$notify.error({
 						title: '错误',
@@ -54,7 +53,7 @@ export default {
 				}else{
 					this.$message.success('登陆成功');
 					// 保存登陆用户信息sessionStorage
-					this.loginInfo.UserName = this.UserName
+					this.loginInfo = res.data.result[0]
 					sessionStorage.setItem('login',JSON.stringify(this.loginInfo))
 					// 回到首页
 					this.$router.push('/')

@@ -1,4 +1,5 @@
 <template>
+<!-- 首页 -->
   <div>
     <div class="header">
       <div class="header_title">
@@ -11,13 +12,13 @@
           <cButton :title="'注册'" @click="register"></cButton>
         </div>
         <div v-if="showlogin" class="showlogin">
-          <p >hello : <span @mousemove="mousemove">{{loginInfo.UserName}}</span></p>
+          <p >hello : <span @mousemove="mousemove">{{loginInfo.username}}</span></p>
           <i class="el-icon-caret-bottom"></i>
           <div class="headphoto"><img src="../../assets/image/touxiang.png" alt=""></div>
           <div class="hoverlogin" ref="hoverlogin"  @mouseleave="mouseleave">
             <ul>
               <li @click="userInfo"><i class="el-icon-user"></i> 用户信息</li>
-              <li><i class="el-icon-s-operation"></i> 开发管理</li>
+              <li @click="development" v-if="loginInfo.dechema == 1"><i class="el-icon-s-operation"></i> 开发管理</li>
               <li @click="exitLogin"><i class="el-icon-s-tools"></i> 退出登陆</li>
             </ul>
           </div>
@@ -26,7 +27,7 @@
     </div>
     <div class="content">
       <div class="head_portrait" v-if="showlogin">
-        <img src="../../assets/image/touxiang.png" alt="">
+        <img :src="imageUrl" alt="">
       </div>
       <div class="contain">
         <div class="right">
@@ -51,6 +52,7 @@ export default {
     return {
       showlogin:false, // true为已登录状态，false是未登录状态
       loginInfo:{},
+      imageUrl:''
     };
   },
   watch: {
@@ -85,11 +87,20 @@ export default {
     // 判断是否是登陆状态 从而更改首页样式
     showLogin(){
       this.loginInfo = JSON.parse(sessionStorage.getItem('login'))
-      if(this.loginInfo && this.loginInfo.UserName){
+      if(this.loginInfo && this.loginInfo.username){
         this.showlogin = true
+        this.getUserData()
       }else{
         this.showlogin = false
       }
+    },
+    // 获取当前登陆用户头像
+    getUserData(){
+      this.imageUrl = this.loginInfo.imgurl
+    },
+    // 开发者管理页
+    development(){
+      this.$router.push("/development")
     },
   },
   created() {

@@ -5,10 +5,8 @@
     </div>
     <div class="form">
       <el-form label-position="right" label-width="80px" :model="formLabelAlign">
-        <el-form-item label="用户名" prop="username"
-          :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' },]"
-        >
-          <el-input v-model="formLabelAlign.username"></el-input>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="formLabelAlign.username" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="昵称">
           <el-input v-model="formLabelAlign.nickname"></el-input>
@@ -70,9 +68,9 @@ export default {
     // 获取当前登陆用户现有资料
     getData(){
       this.login = JSON.parse(sessionStorage.getItem('login'))
-      if(!this.login &&  !this.login.UserName) return ''
+      if(!this.login &&  !this.login.username) return ''
       let params = {
-        username:this.login.UserName
+        username:this.login.username
       }
       this.$axios.post('/users/QueryUserInfo',params).then(res=>{
         this.formLabelAlign = res.data.result[0]
