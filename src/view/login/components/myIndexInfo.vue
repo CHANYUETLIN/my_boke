@@ -18,7 +18,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="用户角色">
-          <el-select v-model="formLabelAlign.dechema" placeholder="当前用户角色" :disabled="formLabelAlign.dechema!=1">
+          <el-select v-model="formLabelAlign.dechema" placeholder="当前用户角色" :disabled="formLabelAlign.dechema==0">
             <el-option v-for="(item,index) in dechema" :key="index" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       formLabelAlign:{},
-      dechema:[{value:0,label:'普通用户'},{value:1,label:'管理员'}],
+      dechema:[{value:0,label:'普通用户'},{value:1,label:'管理员'},{value:2,label:'开发管理员'}],
       login:{},
     }
   },

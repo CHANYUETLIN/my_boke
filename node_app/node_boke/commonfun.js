@@ -1,6 +1,6 @@
 
 
-const dataBind = {
+const commonfun = {
   // 时间戳格式转换
   formatDate:function(date, fmt) {
     date = new Date(date)
@@ -27,4 +27,4 @@ const dataBind = {
   },
 }
 
-export default dataBind;
+export default commonfun;

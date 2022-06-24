@@ -18,7 +18,7 @@
           <div class="hoverlogin" ref="hoverlogin"  @mouseleave="mouseleave">
             <ul>
               <li @click="userInfo"><i class="el-icon-user"></i> 用户信息</li>
-              <li @click="development" v-if="loginInfo.dechema == 1"><i class="el-icon-s-operation"></i> 开发管理</li>
+              <li @click="development" v-if="loginInfo.dechema !=0 "><i class="el-icon-s-operation"></i> 开发管理</li>
               <li @click="exitLogin"><i class="el-icon-s-tools"></i> 退出登陆</li>
             </ul>
           </div>
@@ -31,13 +31,14 @@
       </div>
       <div class="contain">
         <div class="right">
-          <el-carousel :interval="2000" type="card" height="200px">
-            <el-carousel-item v-for="item in 6" :key="item">
-              <h3 class="medium">{{ item }}</h3>
+          <el-carousel :interval="2000" type="card" height="250px">
+            <el-carousel-item v-for="(item,index) in carouselList" :key="index">
+              <img style="width:100%;height:100%" :src="item.imgurl" alt="">
             </el-carousel-item>
           </el-carousel>
         </div>
-        <div class="middle"></div>
+        <div class="middle">
+        </div>
         <div class="left"></div>
       </div>
     </div>
@@ -52,7 +53,8 @@ export default {
     return {
       showlogin:false, // true为已登录状态，false是未登录状态
       loginInfo:{},
-      imageUrl:''
+      imageUrl:'', // 头像
+      carouselList:[], // 轮播图图片
     };
   },
   watch: {
@@ -102,9 +104,16 @@ export default {
     development(){
       this.$router.push("/development")
     },
+    // 获取轮播图
+    getCarouselList(){
+      this.$axios.get('development/getImageTableData').then(res=>{
+        this.carouselList = res.data.msg.slice(0,6)
+      })
+    },
   },
   created() {
     this.showLogin()
+    this.getCarouselList()
   },
   mounted() {}
 };

@@ -24,6 +24,7 @@ app.all("*",function(request,response,next){
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var registerRouter = require('./routes/register')
+var developmentRouter = require('./routes/development')
 
 // view engine setup 设置模板引擎
 app.set('views', path.join(__dirname, 'views'));
@@ -42,6 +43,7 @@ app.use(express.static('public/images')); // 设置静态图片访问的路径
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/regist',registerRouter)
+app.use('/development',developmentRouter)
 
 
 
