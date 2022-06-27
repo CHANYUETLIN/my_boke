@@ -25,6 +25,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var registerRouter = require('./routes/register')
 var developmentRouter = require('./routes/development')
+var articla = require('./routes/articla')
 
 // view engine setup 设置模板引擎
 app.set('views', path.join(__dirname, 'views'));
@@ -44,6 +45,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/regist',registerRouter)
 app.use('/development',developmentRouter)
+app.use('/development',developmentRouter)
+app.use('/articla',articla)
 
 
 

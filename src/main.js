@@ -11,15 +11,22 @@ import axios from 'axios'
 import cButton from './components/button';
 import ctab from './components/ctab';
 import dataBind from './common/dataBind'
+import "@/assets/iconfont/iconfont.css";
+import mavonEditor from 'mavon-editor';
+import 'mavon-editor/dist/css/index.css';
+import qs from 'qs'
+
 
 
 
 Vue.use(iView)
 Vue.use(ElementUI);
+Vue.use(mavonEditor)
 Vue.component('cButton',cButton)
 Vue.component('ctab',ctab)
 
 Vue.prototype.$dataBind = dataBind
+Vue.prototype.$qs = qs
 
 // ***********aixos拦截器******************************
  

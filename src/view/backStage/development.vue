@@ -15,18 +15,23 @@
               <el-submenu index="1">
                 <template slot="title">
                   <i class="el-icon-location"></i>
-                  <span>首页</span>
+                  <span>图片管理</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="1-1">右侧</el-menu-item>
+                  <el-menu-item index="1-1">轮播图管理</el-menu-item>
                   <el-menu-item index="1-2">中间</el-menu-item>
                   <el-menu-item index="1-3">左侧</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-              <el-menu-item index="2">
-                <i class="el-icon-menu"></i>
-                <span slot="title">导航二</span>
-              </el-menu-item>
+              <el-submenu index="2">
+                <template slot="title">
+                  <i class="el-icon-menu"></i>
+                  <span slot="title">导航二</span>
+                </template>
+                <el-menu-item-group>
+                  <el-menu-item index="2-4">文章</el-menu-item>
+                </el-menu-item-group>
+              </el-submenu>
             </el-menu>
           </el-col>
         </el-row>

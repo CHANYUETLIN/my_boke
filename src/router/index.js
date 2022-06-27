@@ -5,6 +5,7 @@ import login from '../view/login/login.vue'
 import register from '../view/login/register.vue'
 import userInfo from '../view/login/userInfo.vue'
 import development from '../view/backStage/development.vue'
+import articla from '../view/article/writeArticla.vue'
 
 
 Vue.use(Router)
@@ -36,6 +37,11 @@ export default new Router({
       name: 'development',
       component: development,
       
+    },
+    {
+      path: '/articla',
+      name: 'articla',
+      component: articla,
     },
   ]
 })

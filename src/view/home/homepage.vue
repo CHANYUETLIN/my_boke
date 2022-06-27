@@ -19,6 +19,7 @@
             <ul>
               <li @click="userInfo"><i class="el-icon-user"></i> 用户信息</li>
               <li @click="development" v-if="loginInfo.dechema !=0 "><i class="el-icon-s-operation"></i> 开发管理</li>
+              <li @click="markDown" v-if="loginInfo.dechema !=0 "><i class="el-icon-edit-outline"></i> 编写文章</li>
               <li @click="exitLogin"><i class="el-icon-s-tools"></i> 退出登陆</li>
             </ul>
           </div>
@@ -31,13 +32,22 @@
       </div>
       <div class="contain">
         <div class="right">
-          <el-carousel :interval="2000" type="card" height="250px">
+          <el-carousel :interval="2000" type="card" height="250px" v-if="carouselList.length">
             <el-carousel-item v-for="(item,index) in carouselList" :key="index">
               <img style="width:100%;height:100%" :src="item.imgurl" alt="">
             </el-carousel-item>
           </el-carousel>
+          <el-carousel :interval="2000" type="card" height="250px" v-else>
+            <el-carousel-item v-for="item in 6" :key="item">
+              {{item}}
+            </el-carousel-item>
+          </el-carousel>
+          <div class="weather">
+            <div id="he-plugin-standard"></div>
+          </div>
         </div>
         <div class="middle">
+          <card :cardData="cardData"></card>
         </div>
         <div class="left"></div>
       </div>
@@ -46,8 +56,9 @@
 </template>
 
 <script>
+import card from './components/card.vue'
 export default {
-  components: {},
+  components: {card},
   props: {},
   data() {
     return {
@@ -55,12 +66,14 @@ export default {
       loginInfo:{},
       imageUrl:'', // 头像
       carouselList:[], // 轮播图图片
+      cardData:[], // 中间card展示
     };
   },
   watch: {
     
   },
-  computed: {},
+  computed: {
+  },
   methods: {
     login(){
       this.$router.push('/login')
@@ -106,14 +119,49 @@ export default {
     },
     // 获取轮播图
     getCarouselList(){
-      this.$axios.get('development/getImageTableData').then(res=>{
+      this.$axios.get('development/getImageTableData?bShow=true').then(res=>{
         this.carouselList = res.data.msg.slice(0,6)
       })
+    },
+    // 获取天气预报
+    getWeather(){
+      window.WIDGET = {
+        "CONFIG": {
+          "layout": "2",
+          "width": 340,
+          "height": 340,
+          "borderRadius": "5",
+          "background": "1",
+          "dataColor": "FFFFFF",
+          "key": "b0510889550f4536a562532ee184c013"
+        }
+      };
+      (function (d) {
+        var c = d.createElement('link')
+        c.rel = 'stylesheet'
+        c.href = 'https://widget.qweather.net/standard/static/css/he-standard.css?v=1.4.0'
+        var s = d.createElement('script')
+        s.src = 'https://widget.qweather.net/standard/static/js/he-standard.js?v=1.4.0'
+        var sn = d.getElementsByTagName('script')[0]
+        sn.parentNode.insertBefore(c, sn)
+        sn.parentNode.insertBefore(s, sn)
+        s.onload=()=>{
+          //自动宽度
+          setTimeout(() => {
+            document.getElementById("he-plugin-standard").style.width  = "100%";
+          }, 100);
+        }
+      })(document)
+    },
+    // 编写文章
+    markDown(){
+      this.$router.push('/articla')
     },
   },
   created() {
     this.showLogin()
     this.getCarouselList()
+    this.getWeather()
   },
   mounted() {}
 };
@@ -179,7 +227,7 @@ export default {
         ul{
           width: 100%;
           li{
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -230,7 +278,7 @@ export default {
     }
   }
   .contain{
-    height: 800px;
+    height: 1550px;
     // background: rgb(213, 255, 227);
     padding: 40px 40px 30px 40px;
     display: flex;
@@ -242,6 +290,9 @@ export default {
       margin: 0 10px;
       border: 1px dotted #9dbaf278;
       padding: 20px;
+      .weather{
+        margin-top: 20px;
+      }
     }
     .middle{
       width: 60%;
