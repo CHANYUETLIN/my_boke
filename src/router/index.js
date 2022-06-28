@@ -6,6 +6,7 @@ import register from '../view/login/register.vue'
 import userInfo from '../view/login/userInfo.vue'
 import development from '../view/backStage/development.vue'
 import articla from '../view/article/writeArticla.vue'
+import bokeDetail from '../view/article/bokeDetail.vue'
 
 
 Vue.use(Router)
@@ -42,6 +43,11 @@ export default new Router({
       path: '/articla',
       name: 'articla',
       component: articla,
+    },
+    {
+      path: '/bokeDetail',
+      name: 'bokeDetail',
+      component: bokeDetail,
     },
   ]
 })

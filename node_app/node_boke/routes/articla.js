@@ -23,7 +23,7 @@ router.post('/mdimg',(req,res)=>{
   })
 })
 
-// 文章发表（无图片格式）
+// 文章发表
 router.post('/publish',(req,res)=>{
   let data = req.body
   console.log(data,'文章')
@@ -72,6 +72,26 @@ router.get('/getTagData',(req,res)=>{
     else{
       console.log('与MySQL数据库建立连接成功。');
       connection.query(`SELECT * FROM tagTable`,(err,res1)=>{
+        if(err){
+          console.log("数据库查询失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+  })
+})
+
+// 获取文章内容(查询card表)
+router.get('/getCardData',(req,res)=>{
+  connection.getConnection(function(err) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`SELECT * FROM card WHERE bShow='true'`,(err,res1)=>{
         if(err){
           console.log("数据库查询失败")
         }else{

@@ -169,7 +169,6 @@ export default {
   methods: {
     gettagOptionsData(){
       this.$axios.get('articla/getTagData').then(res=>{
-        console.log(res.data.msg,'res')
         this.tagOptions = res.data.msg
       })
     },
@@ -177,7 +176,7 @@ export default {
     change(value, render) {
       // 第一个参数是文字 第二个参数是html格式
       // console.log(value);
-      console.log(render);
+      // console.log(render);
       this.value = value
       this.render = render
     },
@@ -194,72 +193,35 @@ export default {
     handleEditorImgAdd(pos, file){
       var formdata = new FormData();
       formdata.append("file",file)
-      // 将每次的formdata存到一个数组中去 
-      this.files.push(formdata)
-      // console.log(this.files)
-      console.log("上传图片")
-      // 在点击了发表文章后再将图片发送到服务器端
-
+      this.$axios.post("articla/mdimg",formdata).then(res=>{
+        let url = res.data.result[0].imgurl
+        this.$refs.md.$img2Url(pos, url) //通过ref插入到文档中 将src的base64改为url格式
+        console.log('调用',this.render)
+      })
     },
     handleEditorImgDel(){
       console.log('handleEditorImgDel');  
     },
     // 点击了确认发送
-    async save(){
-      console.log("fabiao")
-      // 发表文章的时候先判断是否有图片，如果有图片就调用这个接口
-      if(this.files.length>0){
-        // 先将图片存储到服务器 （以最后一张图片为封面）
-        let coverimg = "";
-        for(let i=0;i<this.files.length;i++){
-          await this.$axios.post("articla/mdimg",this.files[i]).then(res=>{
-            console.log(res,'res')
-            let url = res.data.result[0]
-            this.$refs.md.$img2Url(i+1, url) //通过ref插入到文档中 将src的base64改为
-            coverimg = res.data.msg
-            console.log("封面",coverimg)
-          })
-        }
-        // console.log(this.render) 
-        // 再将其他东西存进去
-        let contain = this.render
-        // npm install qs --save
-        let zhi = this.$qs.stringify({
-          headimg:this.headimg,
-          username:JSON.parse(sessionStorage.getItem('login')).username,
-          title:this.title,
-          coverimg:coverimg,
-          contain:contain,
-          tag:this.tag,
-          bShow:this.radio
-        })
-
-        // this.$axios.post("articla/publish",zhi).then(res=>{
-        //   // console.log(res)
-        // })
-        // this.$router.push({path:"/"})
-      }else{
-        // 因为没有图片所以直接存储 封面给固定封面
-        let coverimg = "http://localhost:8888/vZ5xsMldFGxixlbyxN3igS67.jpg"
-        let contain = this.render
-        console.log("确认发送")
-        // npm install qs --save
-        let zhi = this.$qs.stringify({
-          headimg:this.headimg,
-          username:JSON.parse(sessionStorage.getItem('login')).username,
-          title:this.title, // 标题
-          coverimg:coverimg, // 封面图片
-          contain:contain, // 文章内容
-          tag:this.tag, // 标签key
-          bShow:this.radio, // 是否公开,
-          introduction:this.introduction // 简介
-        })
-        this.$axios.post("articla/publish",zhi).then(res=>{
-          if(res.data.code == '200'){
-            this.router.push('/')
-          }
-        })
+    save(){
+      // 因为没有图片所以直接存储 封面给固定封面
+      let coverimg = "http://localhost:8888/vZ5xsMldFGxixlbyxN3igS67.jpg"
+      let zhi = {
+        headimg:this.headimg,
+        username:JSON.parse(sessionStorage.getItem('login')).username,
+        title:this.title, // 标题
+        coverimg:coverimg, // 封面图片
+        contain:this.render, // 文章内容
+        tag:this.tag, // 标签key
+        bShow:this.radio, // 是否公开,
+        introduction:this.introduction // 简介
       }
+      this.$axios.post("articla/publish",zhi).then(res=>{
+        if(res.data.code == '200'){
+          this.$message.success("发布成功")
+          this.router.push('/')
+        }
+      })
     },
     close(){
       this.$refs.hint.style.cssText = "height:0px"

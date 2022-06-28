@@ -1,24 +1,24 @@
 <template>
   <div>
-    <div v-for="(item,index) in cardData" :key="index" class="card">
+    <div v-for="(item,index) in datalist" :key="index" class="card" @click="cardDetail(item)">
       <div class="card_header">
         <div class="card_header1">
           <img src="../../../assets/image/touxiang.png" alt="">
-          <p>用户名</p>
+          <p>{{item.username}}</p>
         </div>
         <div class="card_header2">
-          <p>2022/6/27</p>
+          <p>{{item.updateTime}}</p>
         </div>
       </div>
-      <div class="card_cover">
-        <img src="" alt="">
+      <div class="card_cover" v-if="item.coverimg != 'undefined'">
+        <img :src="item.coverimg" alt="">
       </div>
       <div class="card_introduction">
-        <p>简介：家发开始卡是风口浪尖阿里发疯了可恶我设计费iOSad房间辣思of速度快放假阿福卡设计费iOSad房间辣思考</p>
+        <p>简介：{{item.introduction}}</p>
       </div>
       <div class="card_button">
-        <i class="iconfont icon-dianzan" ></i> 100
-        <i class="iconfont icon-liulanliang"></i> 2000
+        <i class="iconfont icon-dianzan" ></i> {{item.likes}}
+        <i class="iconfont icon-liulanliang"></i> {{item.views}}
       </div>
     </div>
     <div class="pagination">
@@ -26,7 +26,8 @@
         background
         layout="prev, pager, next"
         @current-change="currentChange"
-        :total="100">
+        :page-size="4"
+        :total="cardData.length">
       </el-pagination>
     </div>
   </div>
@@ -39,27 +40,36 @@ export default {
       type:Array,
       require:false,
       default(){
-        return [1,2,3]
+        return []
       },
     }
   },
   data() {
     return {
-
+      datalist:[],
     }
   },
   mounted(){
-
+    this.showCard(1)
+    console.log(this.cardData,'showCardmonted')
   },
   created(){
-
+    
   },
   computed:{
 
   },
   methods:{
+    showCard(val){
+      this.datalist = this.cardData.slice(val*4-4,val*4)
+    },
     currentChange(val){
-      console.log(val,'val')
+      this.showCard(val)
+    },
+    // 跳转至博客详情页面
+    cardDetail(item){
+      console.log(item,'item')
+      this.$router.push({name:'bokeDetail',params:item})
     }
   },
 }
@@ -73,6 +83,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 0 10px 1px #ededed;
   padding: 10px;
+  cursor: pointer;
   .card_header{
     width: 100%;
     height: 40px;
@@ -105,7 +116,7 @@ export default {
     height: 250px;
     margin-bottom: 10px;
     img{
-      width: 100%;
+      // width: 100%;
       height: 100%;
       display: block;
       border-radius: 10px;

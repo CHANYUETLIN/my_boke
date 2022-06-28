@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="middle">
-          <card :cardData="cardData"></card>
+          <card v-if="cardData.length" :cardData="cardData"></card>
         </div>
         <div class="left"></div>
       </div>
@@ -153,6 +153,12 @@ export default {
         }
       })(document)
     },
+    // 获取文章内容
+    getCardDataList(){
+      this.$axios.get('articla/getCardData').then(res=>{
+        this.cardData = res.data.msg
+      })
+    },
     // 编写文章
     markDown(){
       this.$router.push('/articla')
@@ -162,8 +168,11 @@ export default {
     this.showLogin()
     this.getCarouselList()
     this.getWeather()
+    this.getCardDataList()
   },
-  mounted() {}
+  mounted() {
+    
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -278,7 +287,7 @@ export default {
     }
   }
   .contain{
-    height: 1550px;
+    min-height: 1300px;
     // background: rgb(213, 255, 227);
     padding: 40px 40px 30px 40px;
     display: flex;
