@@ -50,7 +50,7 @@
       <el-table
         :data="ImgtableData"
         border
-        max-height="500"
+        height="500"
         style="width: 100%">
         <el-table-column fixed prop="" label="序号" width="80">
           <template slot-scope="scope">
@@ -65,6 +65,7 @@
           :prop="item.prop"
           :label="item.name">
           <template slot-scope="scope">
+            <img v-if="item.prop=='image'" :src="scope.row.imgurl" alt="" style="width:55px;height:55px;overflow:hidden">
             <span v-if="item.prop=='bShow'">
               {{scope.row.bShow == 'true'?'是':'否'}}
             </span>
@@ -102,6 +103,7 @@ export default {
       ImgtableData: [],
       ImgHeader:[
         {prop:'name',name:'图片名称',width:'150'},
+        {prop:'image',name:'缩略图',width:'60'},
         {prop:'imgurl',name:'图片地址',width:'400'},
         {prop:'dateTime',name:'上传日期',width:'150'},
         {prop:'bShow',name:'是否显示',width:'80'}

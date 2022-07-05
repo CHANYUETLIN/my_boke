@@ -19,7 +19,7 @@
                 </template>
                 <el-menu-item-group>
                   <el-menu-item index="1-1">轮播图管理</el-menu-item>
-                  <el-menu-item index="1-2">中间</el-menu-item>
+                  <el-menu-item index="1-2">文章管理</el-menu-item>
                   <el-menu-item index="1-3">左侧</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
@@ -37,16 +37,18 @@
         </el-row>
       </div>
       <div class="right">
-        <leftoneTOone></leftoneTOone>
+        <leftoneTOone v-show="indexShow == '1-1'"></leftoneTOone>
+        <leftoneToTwo v-show="indexShow == '1-2'"></leftoneToTwo>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import leftoneToTwo from './components/left1_2.vue'
 import leftoneTOone from './components/left1_1.vue'
 export default {
-  components: {leftoneTOone, },
+  components: {leftoneTOone,leftoneToTwo },
   name:'development',
   data() {
     return {

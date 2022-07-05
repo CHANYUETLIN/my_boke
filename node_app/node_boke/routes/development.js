@@ -52,10 +52,9 @@ router.post('/bannerUpload',(req,res)=>{
   })
 })
 
-// 获取图片数据
+// 获取图片数据（获取轮播图管理数据）
 router.get('/getImageTableData',(req,res)=>{
   let data = req.query
-  console.log(data.bShow,'data')
   var url = ''
   if(data.bShow){
     url = `SELECT * FROM bannerimg WHERE bShow = '${data.bShow}'`
@@ -68,7 +67,6 @@ router.get('/getImageTableData',(req,res)=>{
       console.log('与MySQL数据库建立连接成功。');
       // 查询是否有重复的用户名
       connection.query(`${url}`,(err,res1)=>{
-        console.log(url,'url')
         if(err){
           console.log("数据库查询失败",err)
         }else{
@@ -82,7 +80,7 @@ router.get('/getImageTableData',(req,res)=>{
   });
 })
 
-// 删除图片数据
+// 删除图片数据（根据图片路径删除该行数据）
 router.post('/deleteImageTableData',(req,res)=>{
   let data = req.body
   connection.getConnection(function(err) {
@@ -101,6 +99,27 @@ router.post('/deleteImageTableData',(req,res)=>{
       })
     }
   });
+})
+
+
+// 文章管理获取所有文章数据
+router.get('/getCardData',(req,res)=>{
+  connection.getConnection(function(err) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`SELECT * FROM card`,(err,res1)=>{
+        if(err){
+          console.log("数据库查询失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+  })
 })
 
 module.exports = router;

@@ -49,7 +49,10 @@
         <div class="middle">
           <card v-if="cardData.length" :cardData="cardData"></card>
         </div>
-        <div class="left"></div>
+        <div class="left">
+          <a href="www.baidu.com">链接</a>
+          <!-- 链接有问题拉 -->
+        </div>
       </div>
     </div>
   </div>

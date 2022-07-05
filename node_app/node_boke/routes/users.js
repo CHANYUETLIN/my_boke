@@ -14,6 +14,7 @@ router.get('/login',(req,res)=>{
   // 获取到客户端传过来的参数
   // 获取post请求，消息体里面的信息 get请求 req.query
   const data = req.query
+  console.log("登陆")
   // 调用业务层
   // 如果要响应内容回客户端，使用send()
   return new Promise((res,rej)=>{

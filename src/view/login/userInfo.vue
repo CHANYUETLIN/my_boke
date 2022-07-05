@@ -23,6 +23,9 @@
         <div v-show="active == 0" style="width:100%;height:100%">
           <my-index-info></my-index-info>
         </div>
+        <div v-show="active == 1" style="width:100%;height:100%">
+          
+        </div>
       </div>
     </div>
   </div>
@@ -95,7 +98,7 @@ export default {
 }
 .user{
   width: 100%;
-  height: 90%;
+  height: 92%;
   background: #fff;
   display: flex;
   .list{

@@ -26,7 +26,6 @@ router.post('/mdimg',(req,res)=>{
 // 文章发表
 router.post('/publish',(req,res)=>{
   let data = req.body
-  console.log(data,'文章')
   connection.getConnection(function(err) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
@@ -85,7 +84,7 @@ router.get('/getTagData',(req,res)=>{
   })
 })
 
-// 获取文章内容(查询card表)
+// 获取文章内容(查询card表bShow为true的)
 router.get('/getCardData',(req,res)=>{
   connection.getConnection(function(err) {
     if(err) console.log('与MySQL数据库建立连接失败。');
@@ -105,5 +104,46 @@ router.get('/getCardData',(req,res)=>{
   })
 })
 
+// 文章内容点赞
+router.post('/artLikes',(req,res)=>{
+  let data = req.body
+  connection.getConnection(function(err) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`UPDATE card SET likes='${data.likes}' WHERE id=${data.id}`,(err,res1)=>{
+        if(err){
+          console.log("数据库更新失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+  })
+})
+
+// 文章内容浏览
+router.post('/artViews',(req,res)=>{
+  let data = req.body
+  connection.getConnection(function(err) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`UPDATE card SET views='${data.views}' WHERE id=${data.id}`,(err,res1)=>{
+        if(err){
+          console.log("数据库更新失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+  })
+})
 
 module.exports = router;

@@ -219,7 +219,7 @@ export default {
       this.$axios.post("articla/publish",zhi).then(res=>{
         if(res.data.code == '200'){
           this.$message.success("发布成功")
-          this.router.push('/')
+          this.$router.push('/')
         }
       })
     },

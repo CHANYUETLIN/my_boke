@@ -28,13 +28,13 @@ ul,li{
 /*-------滚动条整体样式----*/
 ::-webkit-scrollbar {
   width:5px;
-  height:10px;
+  height:5px;
 }
   /*滚动条里面小方块样式*/
 ::-webkit-scrollbar-thumb {
   border-radius:100px;
   -webkit-box-shadow:inset 0 0 5px rgb(255, 255, 255);
-  background:rgb(128, 141, 255);
+  background:rgb(171, 180, 255);
 }
   /*滚动条里面轨道样式*/
 ::-webkit-scrollbar-track {

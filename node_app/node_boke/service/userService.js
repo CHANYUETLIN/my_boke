@@ -12,7 +12,7 @@ function login(res,data){
     return new Promise((res,rej)=>{
        findUser('select * from user',res)
     }).then(result=>{
-
+        console.log('查询登陆')
         if(!data.username || !data.password){
             return res({
                 code:'404',
