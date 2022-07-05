@@ -37,8 +37,8 @@
         </el-row>
       </div>
       <div class="right">
-        <leftoneTOone v-show="indexShow == '1-1'"></leftoneTOone>
-        <leftoneToTwo v-show="indexShow == '1-2'"></leftoneToTwo>
+        <leftoneTOone v-if="indexShow == '1-1'"></leftoneTOone>
+        <leftoneToTwo v-if="indexShow == '1-2'"></leftoneToTwo>
       </div>
     </div>
   </div>

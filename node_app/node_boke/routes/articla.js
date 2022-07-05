@@ -50,7 +50,7 @@ router.post('/publish',(req,res)=>{
           dateTime = dateTime.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : ('00' + str).substr(str.length));
         }
       }
-      connection.query(`INSERT INTO card(username,headimg,updateTime,coverimg,introduction,views,likes,types,title,contain,bShow) VALUES ('${data.username}','${data.headimg}','${dateTime}','${data.coverimg}','${data.introduction}','0','0',${data.tag},'${data.title}','${data.contain}','${data.bShow}');`,(err,res1)=>{
+      connection.query(`INSERT INTO card(username,headimg,updateTime,coverimg,introduction,views,likes,types,title,contain,private) VALUES ('${data.username}','${data.headimg}','${dateTime}','${data.coverimg}','${data.introduction}','0','0',${data.tag},'${data.title}','${data.contain}','${data.private}');`,(err,res1)=>{
         if(err){
           console.log("数据库新增失败",err)
         }else{

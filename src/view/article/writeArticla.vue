@@ -213,7 +213,7 @@ export default {
         coverimg:coverimg, // 封面图片
         contain:this.render, // 文章内容
         tag:this.tag, // 标签key
-        bShow:this.radio, // 是否公开,
+        private:this.radio, // 是否公开,
         introduction:this.introduction // 简介
       }
       this.$axios.post("articla/publish",zhi).then(res=>{

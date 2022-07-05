@@ -3,6 +3,12 @@ var router = express.Router();
 var connection = require('../Dao/dbUtil');
 var multiparty = require('multiparty');//获取上传的图片功能
 
+
+/* 后台管理 */ 
+
+
+/**轮播图管理 */
+
 // 首页左侧轮播图上传
 router.post('/bannerUpload',(req,res)=>{
   // 要返回的 json 数据
@@ -102,6 +108,8 @@ router.post('/deleteImageTableData',(req,res)=>{
 })
 
 
+/** 文章管理 */
+
 // 文章管理获取所有文章数据
 router.get('/getCardData',(req,res)=>{
   connection.getConnection(function(err) {
@@ -111,6 +119,48 @@ router.get('/getCardData',(req,res)=>{
       connection.query(`SELECT * FROM card`,(err,res1)=>{
         if(err){
           console.log("数据库查询失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+  })
+})
+
+// 删除文章
+router.post('/deletCardData',(req,res)=>{
+  let id = req.body.id
+  connection.getConnection(function(err) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`UPDATE card SET bShow='false' WHERE id=${id}`,(err,res1)=>{
+        if(err){
+          console.log("数据库更新失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+  })
+})
+
+// 修改文章数据
+router.post('/updateCardData',(req,res)=>{
+  let data = req.body
+  connection.getConnection(function(err) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`UPDATE card SET introduction='${data.introduction}',title='${data.title}',types='${data.types}',private='${data.private}' WHERE id=${data.id}`,(err,res1)=>{
+        if(err){
+          console.log("数据库更新失败",err)
         }else{
           res.send({
             code:'200',
