@@ -26,7 +26,7 @@ router.post('/mdimg',(req,res)=>{
 // 文章发表
 router.post('/publish',(req,res)=>{
   let data = req.body
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
@@ -61,12 +61,13 @@ router.post('/publish',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   });
 })
 
 // 获取文章tag标签
 router.get('/getTagData',(req,res)=>{
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
@@ -81,12 +82,13 @@ router.get('/getTagData',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   })
 })
 
 // 获取文章内容(查询card表bShow为true的)
 router.get('/getCardData',(req,res)=>{
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
@@ -101,13 +103,14 @@ router.get('/getCardData',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   })
 })
 
 // 文章内容点赞
 router.post('/artLikes',(req,res)=>{
   let data = req.body
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
@@ -122,19 +125,20 @@ router.post('/artLikes',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   })
 })
 
-// 文章内容浏览
+// 文章内容浏览量
 router.post('/artViews',(req,res)=>{
   let data = req.body
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
       connection.query(`UPDATE card SET views='${data.views}' WHERE id=${data.id}`,(err,res1)=>{
         if(err){
-          console.log("数据库更新失败")
+          console.log("数据库更新失败1")
         }else{
           res.send({
             code:'200',
@@ -143,6 +147,74 @@ router.post('/artViews',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
+  })
+})
+
+/**文章评论 */
+
+// 获取评论数据
+router.get('/getcomments',(req,res)=>{
+  connection.getConnection(function(err,con) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功1。');
+      connection.query(`SELECT * FROM card_comments WHERE card_id=${req.query.card_id}`,(err,res1)=>{
+        if(err){
+          console.log("数据库查询失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+    con.release() // 释放连接
+  })
+})
+
+// 发表一级评论
+router.post('/onecomments',(req,res)=>{
+  let data = req.body
+  connection.getConnection(function(err,con) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功1。');
+      connection.query(`insert into card_comments (hierarchy,replyTime,nickname,contain,headimg,likes,nonelikes,card_id,category_id) values ('${data.hierarchy}','${data.replyTime}','${data.nickname}','${data.contain}','${data.headimg}','${data.likes}','${data.nonelikes}',${data.card_id},${data.category_id});`,(err,res1)=>{
+        if(err){
+          console.log("数据库插入失败",err)
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+    con.release() // 释放连接
+  })
+})
+
+// 发表二级及以上评论
+router.post('/twocomments',(req,res)=>{
+  let data = req.body
+  connection.getConnection(function(err,con) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功2。');
+      connection.query(`insert into card_comments (hierarchy,replyTime,reply_id,nickname,contain,headimg,likes,nonelikes,card_id,reply_nickname,category_id) values ('${data.hierarchy}','${data.replyTime}','${data.reply_id}','${data.nickname}','${data.contain}','${data.headimg}','${data.likes}','${data.nonelikes}',${data.card_id},'${data.reply_nickname}',${data.category_id});`,(err,res1)=>{
+        if(err){
+          console.log("数据库插入失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+    con.release() // 释放连接
   })
 })
 

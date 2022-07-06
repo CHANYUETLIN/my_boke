@@ -30,7 +30,7 @@ router.get('/login',(req,res)=>{
 // 用户个人信息查询（根据用户名查询）
 router.post('/QueryUserInfo',(req,res)=>{
   let data = req.body
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       // 查询是否有重复的用户名
@@ -48,13 +48,14 @@ router.post('/QueryUserInfo',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   });
 })
 
 // 用户个人信息修改
 router.post('/UpdateUserInfo',(req,res)=>{
   let data = req.body
-  connection.getConnection((err)=>{
+  connection.getConnection((err,con)=>{
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       connection.query(`update user set nickname='${data.nickname}', sex=${data.sex}, email='${data.email?data.email:''}', phone='${data.phone?data.phone:''}', described='${data.described?data.described:''}', url='${data.url?data.url:''}' WHERE username='${data.username}'`,(err,res1)=>{
@@ -72,6 +73,7 @@ router.post('/UpdateUserInfo',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   })
 })
 
@@ -96,7 +98,7 @@ router.post('/InsertheadImg',(req,res)=>{
     let url='http://localhost:8888/'+files.file[0].path; 
     let imgurl = url.replace(url.substring(22,36),'') // http://localhost:8888/frocnecRE047_pXgBQt499GC.png url
     myResult.result[0].imgurl=imgurl;
-    connection.getConnection((err)=>{
+    connection.getConnection((err,con)=>{
       let Sql = `UPDATE user SET imgurl='${imgurl}' WHERE username='${fields.username[0]}'`; //增
       connection.query(Sql,function (err, res1) {
         if(err){
@@ -107,6 +109,7 @@ router.post('/InsertheadImg',(req,res)=>{
           res.send(myResult); 
         }
       })
+      con.release() // 释放连接
     })
   })
 })

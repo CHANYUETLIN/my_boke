@@ -43,9 +43,10 @@
             {{scope.row.private == 'true'?'是':'否'}}
           </template>
         </el-table-column>
-        <el-table-column label="操作" prop="bShow" width="100" fixed="right">
+        <el-table-column label="操作" prop="bShow" width="150" fixed="right">
           <template slot-scope="scope">
             <el-button @click="deletCard(scope.row,scope.$index)" type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="tobokeDetail(scope.row,scope.$index)">查看</el-button>
             <el-button type="text" size="small" @click="editCard(scope.row,scope.$index)">编辑</el-button>
           </template>
         </el-table-column>
@@ -160,6 +161,10 @@ export default {
           this.$message.success('更新成功')
         }
       })
+    },
+    // 跳转到文章详情
+    tobokeDetail(row){
+      this.$router.push({name:'bokeDetail',params:row})
     },
   },
 }

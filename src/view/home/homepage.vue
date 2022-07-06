@@ -52,6 +52,7 @@
         <div class="left">
           <a href="www.baidu.com">链接</a>
           <!-- 链接有问题拉 -->
+          <el-button @click="ceshi" size="mini">测试按钮</el-button>
         </div>
       </div>
     </div>
@@ -78,6 +79,10 @@ export default {
   computed: {
   },
   methods: {
+    ceshi(){
+      let date = this.$dataBind.timeago(new Date('2022-07-04T16:00:00.000Z'))
+      console.log(date,'date')
+    },
     login(){
       this.$router.push('/login')
     },

@@ -86,6 +86,19 @@ export default {
 					});
 				}else{
 					this.$message.success('用户信息更新成功');
+          let params = {
+            username:this.login.username,
+            password:this.login.password,
+            dechema:this.formLabelAlign.dechema,
+            nickname:this.formLabelAlign.nickname,
+            sex:this.formLabelAlign.sex,
+            email:this.formLabelAlign.email,
+            phone:this.formLabelAlign.phone,
+            described:this.formLabelAlign.described,
+            url:this.formLabelAlign.url,
+            imgurl:this.formLabelAlign.imgurl,
+          }
+          sessionStorage.setItem('login',JSON.stringify(params))
 				}
       })
     },

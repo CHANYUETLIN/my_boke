@@ -44,7 +44,7 @@ router.post('/bannerUpload',(req,res)=>{
         dateTime = dateTime.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : ('00' + str).substr(str.length));
       }
     }
-    connection.getConnection((err)=>{
+    connection.getConnection((err,con)=>{
       let Sql = `INSERT INTO bannerimg (imgurl,name,dateTime,bShow) VALUES ('${imgurl}','${files.file[0].originalFilename}','${dateTime}','true');`; //增
       connection.query(Sql,function (err, res1) {
         if(err){
@@ -54,6 +54,7 @@ router.post('/bannerUpload',(req,res)=>{
           res.send(myResult); 
         }
       })
+      con.release() // 释放连接
     })
   })
 })
@@ -67,7 +68,7 @@ router.get('/getImageTableData',(req,res)=>{
   }else{
     url = `SELECT * FROM bannerimg`
   }
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
@@ -83,13 +84,14 @@ router.get('/getImageTableData',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   });
 })
 
 // 删除图片数据（根据图片路径删除该行数据）
 router.post('/deleteImageTableData',(req,res)=>{
   let data = req.body
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
@@ -104,6 +106,7 @@ router.post('/deleteImageTableData',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   });
 })
 
@@ -112,7 +115,7 @@ router.post('/deleteImageTableData',(req,res)=>{
 
 // 文章管理获取所有文章数据
 router.get('/getCardData',(req,res)=>{
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
@@ -127,13 +130,14 @@ router.get('/getCardData',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   })
 })
 
 // 删除文章
 router.post('/deletCardData',(req,res)=>{
   let id = req.body.id
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
@@ -148,13 +152,14 @@ router.post('/deletCardData',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   })
 })
 
 // 修改文章数据
 router.post('/updateCardData',(req,res)=>{
   let data = req.body
-  connection.getConnection(function(err) {
+  connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
@@ -169,6 +174,7 @@ router.post('/updateCardData',(req,res)=>{
         }
       })
     }
+    con.release() // 释放连接
   })
 })
 

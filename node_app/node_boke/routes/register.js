@@ -16,7 +16,7 @@ router.post("/register",(req,res)=>{
       msg:"用户名或密码不能为空"
     })
   }else{
-    connection.getConnection(function(err) {
+    connection.getConnection(function(err,con) {
       if(err) console.log('与MySQL数据库建立连接失败。');
       else{
         let mydate = new Date();
@@ -45,20 +45,12 @@ router.post("/register",(req,res)=>{
                     msg:'注册成功'
                   })
                 }
-                // connection.end()
-                // connection.end(function(err) {
-                //   if (err) {
-                //       console.log('关闭数据库连接失败！')
-                //       throw err
-                //   }else{
-                //     console.log("关闭成功")
-                //   }
-                // })
               })
             }
           }
         })
       }
+      con.release() // 释放连接
     });
   }
   // console.log(req.body)

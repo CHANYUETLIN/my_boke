@@ -15,21 +15,21 @@
               <el-submenu index="1">
                 <template slot="title">
                   <i class="el-icon-location"></i>
-                  <span>图片管理</span>
+                  <span>首页管理</span>
                 </template>
                 <el-menu-item-group>
                   <el-menu-item index="1-1">轮播图管理</el-menu-item>
                   <el-menu-item index="1-2">文章管理</el-menu-item>
-                  <el-menu-item index="1-3">左侧</el-menu-item>
+                  <el-menu-item index="1-3">书签管理</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-submenu index="2">
                 <template slot="title">
                   <i class="el-icon-menu"></i>
-                  <span slot="title">导航二</span>
+                  <span slot="title">用户管理</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="2-4">文章</el-menu-item>
+                  <el-menu-item index="2-4">新用户管理</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </el-menu>
@@ -39,16 +39,18 @@
       <div class="right">
         <leftoneTOone v-if="indexShow == '1-1'"></leftoneTOone>
         <leftoneToTwo v-if="indexShow == '1-2'"></leftoneToTwo>
+        <leftTwoToOne v-if="indexShow == '2-4'"></leftTwoToOne>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import leftTwoToOne from './components/left2_1.vue'
 import leftoneToTwo from './components/left1_2.vue'
 import leftoneTOone from './components/left1_1.vue'
 export default {
-  components: {leftoneTOone,leftoneToTwo },
+  components: {leftoneTOone,leftoneToTwo,leftTwoToOne },
   name:'development',
   data() {
     return {

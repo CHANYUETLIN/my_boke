@@ -56,6 +56,11 @@ export default {
 					});
 				}else{
 					this.$message.success('注册成功');
+					let params = {
+						username:this.username,
+						password:this.Password,
+					}
+					sessionStorage.setItem('login',JSON.stringify(params))
 					// 回到首页
 					this.$router.push('/')
 				}
