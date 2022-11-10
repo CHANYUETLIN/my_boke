@@ -15,15 +15,15 @@
         <el-table-column label="用户名" prop="username" width="180"></el-table-column>
         <el-table-column label="标题" prop="title" width="200"></el-table-column>
         <el-table-column label="简介" prop="introduction" width="280"></el-table-column>
-        <el-table-column label="头像" prop="headimg" width="100">
+        <el-table-column label="头像" prop="headimg" width="85">
           <template slot-scope="scope">
-            <img style="width:80px;height:80px;overflow:hidden" :src="scope.row.headimg" alt="">
+            <img style="width:60px;height:60px;overflow:hidden" :src="scope.row.headimg" alt="">
           </template>
         </el-table-column>
         <el-table-column label="上传日期" prop="updateTime" width="280"></el-table-column>
-        <el-table-column label="封面" prop="coverimg" width="180">
+        <el-table-column label="封面" prop="coverimg" width="80">
           <template slot-scope="scope">
-            <img style="width:120px;height:120px;overflow:hidden" :src="scope.row.headimg" alt="">
+            <img style="width:60px;height:60px;overflow:hidden" :src="scope.row.headimg" alt="">
           </template>
         </el-table-column>
         <el-table-column label="浏览量" prop="views" width="100"></el-table-column>
@@ -35,7 +35,7 @@
         </el-table-column>
         <el-table-column label="内容" prop="contain" width="300">
           <template slot-scope="scope">
-            <div v-html="scope.row.contain.replace(/<img/g,`<img style='width:100px;height:100px'`)" class="scopeImg"></div>
+            <div v-html="scope.row.contain.replace(/<img/g,`<img style='width:60px;height:60px'`)" class="scopeImg"></div>
           </template>
         </el-table-column>
         <el-table-column label="是否公开" prop="private" width="100" fixed="right" align="center">
@@ -184,6 +184,7 @@ export default {
     font-size: 16px;
     font-weight: 600;
     border-bottom: 1px solid rgb(233, 233, 233);
+    margin-bottom: 10px;
   }
 }
 .scopeImg{

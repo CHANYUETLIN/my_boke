@@ -29,7 +29,7 @@
                   <span slot="title">用户管理</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="2-4">新用户管理</el-menu-item>
+                  <el-menu-item index="2-4">用户管理</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </el-menu>

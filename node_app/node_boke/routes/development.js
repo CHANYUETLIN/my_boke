@@ -178,4 +178,53 @@ router.post('/updateCardData',(req,res)=>{
   })
 })
 
+
+/** 用户管理 */
+// 用户所有数据查询
+router.get('/AlluserData',(req,res)=>{
+  connection.getConnection(function(err,con) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`SELECT * FROM user`,(err,res1)=>{
+        if(err){
+          console.log("数据库查询失败")
+        }else{
+          let arr = res1
+          for(let i in arr){
+            arr[i].bEdit = false
+          }
+          res.send({
+            code:'200',
+            msg:arr
+          })
+        }
+      })
+    }
+    con.release() // 释放连接
+  })
+})
+
+// 更改用户状态
+router.post('/updateUserDechema',(req,res)=>{
+  let data = req.body
+  connection.getConnection(function(err,con) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`UPDATE user SET dechema=${data.dechema} WHERE id=${data.id}`,(err,res1)=>{
+        if(err){
+          console.log("数据库查询失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:res1
+          })
+        }
+      })
+    }
+    con.release() // 释放连接
+  })
+})
+
 module.exports = router;

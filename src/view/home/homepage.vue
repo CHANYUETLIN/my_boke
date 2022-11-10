@@ -32,6 +32,9 @@
       </div>
       <div class="contain">
         <div class="right">
+          <div class="weather">
+            <div id="he-plugin-standard"></div>
+          </div>
           <el-carousel :interval="2000" type="card" height="250px" v-if="carouselList.length">
             <el-carousel-item v-for="(item,index) in carouselList" :key="index">
               <img style="width:100%;height:100%" :src="item.imgurl" alt="">
@@ -42,9 +45,6 @@
               {{item}}
             </el-carousel-item>
           </el-carousel>
-          <div class="weather">
-            <div id="he-plugin-standard"></div>
-          </div>
         </div>
         <div class="middle">
           <card v-if="cardData.length" :cardData="cardData"></card>
@@ -80,8 +80,9 @@ export default {
   },
   methods: {
     ceshi(){
-      let date = this.$dataBind.timeago(new Date('2022-07-04T16:00:00.000Z'))
-      console.log(date,'date')
+      let arr = [{}]
+      arr[0].bEdit = '123'
+      console.log(arr)
     },
     login(){
       this.$router.push('/login')
@@ -188,21 +189,21 @@ export default {
   width: 100%;
   height: 400px;
   background: rgb(219, 219, 255);
-  background-image: url('../../assets/home/banner03.png');
+  background-image: url('../../assets/home/banner04.png');
   background-repeat:no-repeat;
   background-size: 100%;
   border-bottom-left-radius:10px;
   border-bottom-right-radius:10px;
-  box-shadow: 0px 5px 20px #9dbaf2;
+  box-shadow: 0px 0px 10px 3px #f9d1d8;
   .header_title{
-    height: 50px;
+    height: 60px;
     background: #ffffff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 5px 40px;
-    border-bottom-left-radius:10px;
-    border-bottom-right-radius:10px;
+    // border-bottom-left-radius:10px;
+    // border-bottom-right-radius:10px;
     // opacity: 0;
     .logo{
       img{
@@ -271,8 +272,8 @@ export default {
     
   }
   .header_title:hover{
-    height: 50px;
-    opacity: 0.9;
+    height: 60px;
+    background: rgba(255,255,255,0.3);
     transition: 0.25s;
   }
 }
@@ -308,7 +309,7 @@ export default {
       border: 1px dotted #9dbaf278;
       padding: 20px;
       .weather{
-        margin-top: 20px;
+        margin-bottom: 40px;
       }
     }
     .middle{
