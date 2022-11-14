@@ -12,17 +12,20 @@
           <cButton :title="'注册'" @click="register"></cButton>
         </div>
         <div v-if="showlogin" class="showlogin">
-          <p >hello : <span @mousemove="mousemove">{{loginInfo.username}}</span></p>
-          <i class="el-icon-caret-bottom"></i>
-          <div class="headphoto"><img src="../../assets/image/touxiang.png" alt=""></div>
-          <div class="hoverlogin" ref="hoverlogin"  @mouseleave="mouseleave">
-            <ul>
-              <li @click="userInfo"><i class="el-icon-user"></i> 用户信息</li>
-              <li @click="development" v-if="loginInfo.dechema !=0 "><i class="el-icon-s-operation"></i> 开发管理</li>
-              <li @click="markDown" v-if="loginInfo.dechema !=0 "><i class="el-icon-edit-outline"></i> 编写文章</li>
-              <li @click="exitLogin"><i class="el-icon-s-tools"></i> 退出登陆</li>
-            </ul>
+          <!-- <i class="el-icon-caret-bottom"></i> -->
+          <div class="headphoto" @mousemove="mousemove" @mouseleave="mouseleave">
+            <img src="../../assets/image/touxiang.png" alt="" ref="headImg">
+            <div class="hoverlogin" ref="hoverlogin" >
+              <ul style="margin-top:25px">
+                <li @click="userInfo"><i class="el-icon-user"></i> 用户信息</li>
+                <li @click="development" v-if="loginInfo.dechema !=0 "><i class="el-icon-s-operation"></i> 开发管理</li>
+                <li @click="markDown" v-if="loginInfo.dechema !=0 "><i class="el-icon-edit-outline"></i> 编写文章</li>
+                <li @click="exitLogin"><i class="el-icon-s-tools"></i> 退出登陆</li>
+              </ul>
+            </div>
           </div>
+          
+          <p >hello : <span>{{loginInfo.username}}</span></p>
         </div>
       </div>
     </div>
@@ -92,11 +95,13 @@ export default {
     },
     // 鼠标移入
     mousemove(){
-      this.$refs.hoverlogin.style = "height:200px;transition:0.24s"
+      this.$refs.hoverlogin.style = "height:200px;transition:0.24s;box-shadow: 0 0 6px 1px #fff;"
+      this.$refs.headImg.style = "width:60px;height:60px;transition:0.24s;border-radius:50%;position:absolute;z-index:9;"
     },
     // 鼠标移出
     mouseleave(){
       this.$refs.hoverlogin.style = "height:0px;"
+      this.$refs.headImg.style = "width:40px;height:40px;transition:0.24s;border-radius:50%"
     },
     // 账户信息
     userInfo(){
@@ -165,7 +170,8 @@ export default {
     // 获取文章内容
     getCardDataList(){
       this.$axios.get('articla/getCardData').then(res=>{
-        this.cardData = res.data.msg
+        // 按照时间倒叙排列
+        this.cardData = this.$dataBind.sortBy(res.data.msg,'updateTime','desc') 
       })
     },
     // 编写文章
@@ -231,12 +237,12 @@ export default {
         }
       }
       .hoverlogin{
-        width: 120px;
+        width: 225px;
         height: 0px;
         overflow: hidden;
         position: absolute;
-        top: 36px;
-        right: 30px;
+        top: 48px;
+        right: -96px;
         background: #fff;
         border-radius: 5px;
         display: flex;
@@ -245,27 +251,33 @@ export default {
         ul{
           width: 100%;
           li{
-            margin-bottom: 15px;
+            padding: 7px 0;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor:pointer;
+            transition: 0.24s;
             width: 100%;
             i{
               margin-right: 5px;
             }
           }
+          li:hover{
+            background: rgb(255, 246, 246);
+          }
         }
       }
       .headphoto{
-        width: 30px;
-        height: 30px;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-left: 10px;
+        width: 40px;
+        height: 40px;
+        // overflow: hidden;
+        position: relative;
+        margin: 0 30px;
+        cursor: pointer;
         img{
-          width: 30px;
-          height: 30px;
+          width: 40px;
+          height: 40px;
+          border-radius: 25px;
         }
       }
     }
@@ -273,7 +285,8 @@ export default {
   }
   .header_title:hover{
     height: 60px;
-    background: rgba(255,255,255,0.3);
+    background: rgb(255, 255, 255);
+    // background: rgba(255,255,255,0.3);
     transition: 0.25s;
   }
 }

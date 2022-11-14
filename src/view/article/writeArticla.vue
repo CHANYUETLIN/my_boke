@@ -21,7 +21,7 @@
           <el-input v-model="title" placeholder="请输入标题"></el-input>
         </div>
         <div class="Save">
-           <el-button round @click="saves">保存草稿</el-button>
+           <el-button round @click="savesDraft">保存草稿</el-button>
         </div>
         <div class="publish">
           <el-button round @click="publish">发表文章</el-button>
@@ -33,13 +33,16 @@
     </div>
     <div class="markdown">
       <mavon-editor
-        :toolbars="toolbars"    	
+        :toolbars="toolbars" 
+        :codeStyle="codeStyle" 
         @imgAdd="handleEditorImgAdd" 	
         @imgDel="handleEditorImgDel"	
         style="height:calc(92vh);box-shadow:0 0 0 0" 	
         @change="change"
-        ref="md"	
-        :ishljs = "true"
+        :placeholder="mdPlaceHolder"
+        ref="md"
+        :ishljs="true"
+        fontSize="13px"
         v-model="value"
       />
     </div>
@@ -66,14 +69,15 @@
         <el-input v-model="introduction" placeholder="请输入标签" style="width:300px;"></el-input>
       </div>
       <div class="coverimg">
-        上传封面：
+        上传封面：(删除图片功能暂未开发)
         <!-- 明天来写这个上传封面 -->
         <el-upload
           ref="upload"
           :on-change="upload"
-          action="#"
+          action="http://localhost:8888/articla/InsertheadImg"
+          :limit="1"
           list-type="picture-card"
-          :auto-upload="false">
+          :on-success="uploadSuccess">
             <i slot="default" class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
               <img
@@ -98,14 +102,16 @@
           <el-radio v-model="radio" label="false">私密</el-radio>
       </div>
       <div class="button">
-        <el-button type="danger" plain @click="save">确认发送</el-button>
+        <el-button type="primary" size="small" plain @click="save">确认发送</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import 'mavon-editor/dist/markdown/github-markdown.min.css'
 export default {
+  name:'writeArticla',
   props: {},
   components: {},
   data () {
@@ -124,7 +130,7 @@ export default {
         ul: true, // 无序列表
         link: true, // 链接
         imagelink: true, // 图片链接
-        code: false, // code
+        code: true, // code
         table: true, // 表格
         fullscreen: true, // 全屏编辑
         readmodel: true, // 沉浸式阅读
@@ -145,6 +151,8 @@ export default {
         subfield: true, // 单双栏模式
         preview: true, // 预览
       },
+      mdPlaceHolder:'暂时不可输入单引号在代码块中',
+      codeStyle:'monokai-sublime',
       title:"",
       value:"",
       render:"",
@@ -154,13 +162,26 @@ export default {
       tag:"",
       tagOptions:[],
       // 上传封面
+      coverimg:'', // 封面图片
       disabled: false,
       radio: '1',
-      introduction:''
+      introduction:'',
+      bNewAdd:true, //'是否新建'
+      likes:'',
+      views:'',
     };
   },
 
   created() {
+    this.bNewAdd = true
+    // 如果是从文章管理中跳转过来想要修改页面内容的
+    if(this.$route.params){
+      this.bNewAdd = false
+      let data = this.$route.params
+      console.log(data,'data')
+      this.title = data.title
+      this.value = data.mdContain
+    }
     // 在页面创建时就调出是否含有缓存的html
     // 在页面打开的时候去调用数据库login 中chenyuelin用户名的头像
     this.headimg = JSON.parse(sessionStorage.getItem('login')).imgurl
@@ -181,16 +202,47 @@ export default {
       this.render = render
     },
     // 点击保存草稿
-    saves(){
-      // 设置localStroage的失效时间 expires
-      let data = new Date().getTime();
-      // console.log(data)
-      sessionStorage.setItem("font",this.value,data+1440*2000)
-      sessionStorage.setItem("html",this.render,data+1440*2000)
+    savesDraft(){
+      let draft = {
+        headimg:this.headimg,
+        username:JSON.parse(sessionStorage.getItem('login')).username,
+        title:this.title?this.title:'无标题', // 标题
+        coverimg:null, // 封面图片
+        contain:this.render, // 文章内容 html格式
+        mdContain:this.value, // 文章内容md格式
+        tag:null, // 标签key
+        private:'false', // 是否公开,
+        introduction:null, // 简介
+        isDraft:1, // 草稿
+        likes:this.$route.params.likes,
+        views:this.$route.params.views,
+        id:this.$route.params.id
+      }
+      if(this.bNewAdd){
+        this.$axios.post("articla/publish",draft).then(res=>{
+          if(res.data.code == '200'){
+            this.$message.success("草稿保存成功")
+            this.$router.push('/')
+          }
+        })
+      }else{
+        this.$axios.post("articla/updateArticle",draft).then(res=>{
+          if(res.data.code == '200'){
+            this.$message.success("草稿保存成功")
+            // this.$router.push('/')
+          }
+        })
+      }
+      // // 设置localStroage的失效时间 expires
+      // let data = new Date().getTime();
+      // // console.log(data)
+      // sessionStorage.setItem("font",this.value,data+1440*2000)
+      // sessionStorage.setItem("title",this.title)
     },
     //上传图片接口pos 表示第几个图片 
     // (pos:表示第几个图片, file: File Object)
     handleEditorImgAdd(pos, file){
+      console.log(file,'file')
       var formdata = new FormData();
       formdata.append("file",file)
       this.$axios.post("articla/mdimg",formdata).then(res=>{
@@ -204,24 +256,37 @@ export default {
     },
     // 点击了确认发送
     save(){
-      // 因为没有图片所以直接存储 封面给固定封面
-      let coverimg = "http://localhost:8888/vZ5xsMldFGxixlbyxN3igS67.jpg"
-      let zhi = {
+      let params = {
         headimg:this.headimg,
         username:JSON.parse(sessionStorage.getItem('login')).username,
         title:this.title, // 标题
-        coverimg:coverimg, // 封面图片
-        contain:this.render, // 文章内容
+        coverimg:this.coverimg, // 封面图片
+        contain:this.render, // 文章内容 html格式
+        mdContain:this.value, // 文章内容md格式
         tag:this.tag, // 标签key
         private:this.radio, // 是否公开,
-        introduction:this.introduction // 简介
+        introduction:this.introduction, // 简介
+        isDraft:0 // 是否是草稿
       }
-      this.$axios.post("articla/publish",zhi).then(res=>{
-        if(res.data.code == '200'){
-          this.$message.success("发布成功")
-          this.$router.push('/')
-        }
-      })
+      // 如果是新建的markdown，则直接调用保存新的文章接口
+      if(this.bNewAdd){
+        this.$axios.post("articla/publish",params).then(res=>{
+          if(res.data.code == '200'){
+            this.$message.success("发布成功")
+            this.$router.push('/')
+          }
+        })
+      }else{
+        params.id = this.$route.params.id
+        // 如果是从文章管理跳转过来的，说明是有数据的，调用update接口
+        this.$axios.post("articla/updateArticle",params).then(res=>{
+          if(res.data.code == '200'){
+            this.$message.success("发布成功")
+            this.$router.push('/')
+          }
+        })
+      }
+      
     },
     close(){
       this.$refs.hint.style.cssText = "height:0px"
@@ -231,10 +296,15 @@ export default {
       this.$refs.hint.style.cssText = "height:500px"
     },
 
-    // 上传封面的函数(暂时未完成 暂时一还不能上传封面)
+    // 上传封面的函数
     upload(file,filelist){
       console.log(file,filelist)
       console.log("上传封面")
+    },
+    // 上传封面成功的回调
+    uploadSuccess(response, file, fileList){
+      console.log(response,'res')
+      this.coverimg = response.result[0].imgurl
     },
     handleRemove(file,filelist){
       console.log("移除图片")
@@ -334,25 +404,31 @@ export default {
     .tag{
       margin-top: 20px;
       display: flex;
-      justify-content: space-around;
+      // justify-content: space-around;
       align-items: center;
-      width: 450px;
+      // width: 450px;
+      width: 100%;
+      padding-left: 20px;
     }
     .introduction{
       margin-top: 20px;
       display: flex;
-      justify-content: space-around;
+      // justify-content: space-around;
       align-items: center;
-      width: 450px;
+      // width: 450px;
       margin-bottom: 20px;
+      width: 100%;
+      padding-left: 20px;
     }
     .coverimg{
       margin-top: 20px;
       display: flex;
-      justify-content: space-around;
+      // justify-content: space-around;
       align-items: center;
-      width: 555px;
+      // width: 555px;
       overflow: hidden;
+      width: 100%;
+      padding-left: 20px;
       p{
         position: absolute;
         top: 170px;
@@ -369,9 +445,11 @@ export default {
     .bShow{
       margin-top: 20px;
       display: flex;
-      justify-content: space-around;
+      // justify-content: space-around;
       align-items: center;
-      width: 350px;
+      // width: 350px;
+      width: 100%;
+      padding-left: 20px;
     }
     .button{
       margin-top: 50px;
@@ -380,6 +458,35 @@ export default {
       align-items: center;
       width: 100%;
     }
+  }
+  /deep/ .el-upload--picture-card{
+    width: 100px;
+    height: 100px;
+    font-size: 16px !important;
+  }
+  /deep/ .el-upload{
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    font-size: 16px;
+  }
+  /deep/ .el-upload-list--picture-card .el-upload-list__item{
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    font-size: 16px;
+  }
+
+  /deep/ .el-upload-list--picture-card .el-upload-list__item-actions:hover {
+    opacity: 1;
+    font-size: 16px;
+  }
+
+  /deep/ .el-upload-list--picture-card .el-upload-list__item-thumbnail{
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    font-size: 16px;
   }
 }
 

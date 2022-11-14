@@ -6,7 +6,7 @@
         <el-row class="tac">
           <el-col :span="24">
             <el-menu
-              default-active="1-1"
+              :default-active="defaultActive"
               class="el-menu-vertical-demo"
               @select="handleSelect"
               background-color="#545c64"
@@ -39,6 +39,7 @@
       <div class="right">
         <leftoneTOone v-if="indexShow == '1-1'"></leftoneTOone>
         <leftoneToTwo v-if="indexShow == '1-2'"></leftoneToTwo>
+        <leftoneToThree v-if="indexShow == '1-3'"></leftoneToThree>
         <leftTwoToOne v-if="indexShow == '2-4'"></leftTwoToOne>
       </div>
     </div>
@@ -48,14 +49,16 @@
 <script>
 import leftTwoToOne from './components/left2_1.vue'
 import leftoneToTwo from './components/left1_2.vue'
+import leftoneToThree from './components/left1_3.vue'
 import leftoneTOone from './components/left1_1.vue'
 export default {
-  components: {leftoneTOone,leftoneToTwo,leftTwoToOne },
+  components: {leftoneTOone,leftoneToTwo,leftoneToThree,leftTwoToOne },
   name:'development',
   data() {
     return {
       breadcrumb:[{name:'开发管理',path:''}],
-      indexShow:'1-1'
+      indexShow:'1-1',
+      defaultActive:'1-1'
     }
   },
   mounted(){
@@ -63,6 +66,13 @@ export default {
   },
   computed:{
 
+  },
+  created(){
+    console.log(this.$route.query)
+    if(this.$route.query.indexShow){
+      this.indexShow = JSON.parse(JSON.stringify(this.$route.query.indexShow))
+      this.defaultActive = this.$route.query.indexShow
+    }
   },
   methods:{
     // 选中菜单 index: 选中菜单项的index, indexPath: 选中菜单项的 index path

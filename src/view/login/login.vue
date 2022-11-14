@@ -53,8 +53,9 @@ export default {
 				}else{
 					this.$message.success('登陆成功');
 					// 保存登陆用户信息sessionStorage
-					this.loginInfo = res.data.result[0]
+					this.loginInfo = res.data.result
 					sessionStorage.setItem('login',JSON.stringify(this.loginInfo))
+					console.log(sessionStorage.getItem('login'),'login')
 					// 回到首页
 					this.$router.push('/')
 				}

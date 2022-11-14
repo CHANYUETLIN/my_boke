@@ -71,7 +71,41 @@ const dataBind = {
         result = Nyear + "-" + Nmonth + "-" + Ndate
       }
       return result;
-  }
+  },
+  // 数组对象根据xx排序 正序asc,倒叙desc
+  sortBy(arr,rank,order){
+    console.log(arr,'进来了')
+    if(order == 'asc'){
+      arr.sort((a,b)=>{
+        return a[rank]>b[rank] ? 1 : -1
+      })
+    }else if(order == 'desc'){
+      arr.sort((a,b)=>{
+        return a[rank]>b[rank] ? -1 : 1
+      })
+    }
+    return arr
+  },
+  // 后台保存通用方法
+  saveCard(url,data,_this){
+    // return new Promise((resolve,reject)=>{
+      _this.$axios.post(url,data).then(res=>{
+        console.log(res,'databind')
+        if(res.data.code == 200){
+          _this.$message.success('保存成功')
+          // resolve(res)
+        }
+      })
+    // })
+  },
+  // 后台取消通用方法
+  cancelCard(tableData,val,index){
+    if(val.bNewAdd){
+
+    }else{
+      tableData[index].bEditItem = false
+    }
+  },
 }
 
 export default dataBind;

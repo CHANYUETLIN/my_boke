@@ -8,17 +8,23 @@ import 'element-ui/lib/theme-chalk/index.css';
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import axios from 'axios'
-import cButton from './components/button';
-import ctab from './components/ctab';
+import cButton from './components/button.vue';
+import ctab from './components/ctab.vue';
 import dataBind from './common/dataBind'
 import "@/assets/iconfont/iconfont.css";
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
 import qs from 'qs'
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-dark.css'	//样式
 
 
-
-
+Vue.directive('highlight',function (el) {
+  let blocks = el.querySelectorAll('pre code');
+  blocks.forEach((block)=>{
+    hljs.highlightBlock(block)    
+  })
+})
 Vue.use(iView)
 Vue.use(ElementUI);
 Vue.use(mavonEditor)

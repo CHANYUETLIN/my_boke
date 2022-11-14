@@ -24,7 +24,7 @@ function login(res,data){
                 return res({
                     code:'200',
                     msg:'登陆成功',
-                    result:result
+                    result:result[i]
                 })
             }
             if(i == result.length-1 && (data.username != result[i].username && data.password != result[i].password)){

@@ -1,16 +1,17 @@
 <template>
   <div>
     <div v-for="(item,index) in datalist" :key="index" class="card" @click="cardDetail(item)">
+       <!-- v-if="item.isDraft == 0" -->
       <div class="card_header">
         <div class="card_header1">
           <img src="../../../assets/image/touxiang.png" alt="">
           <p>{{item.username}}</p>
         </div>
         <div class="card_header2">
-          <p>{{item.updateTime}}</p>
+          <p>{{$dataBind.timeago(new Date(item.updateTime))}}</p>
         </div>
       </div>
-      <div class="card_cover" v-if="item.coverimg != 'undefined'">
+      <div class="card_cover" v-if="item.coverimg != 'undefined' && item.coverimg != '' && item.coverimg != 'null'">
         <img :src="item.coverimg" alt="">
       </div>
       <div class="card_introduction">
@@ -69,7 +70,7 @@ export default {
     // 跳转至博客详情页面
     cardDetail(item){
       console.log(item,'item')
-      this.$router.push({name:'bokeDetail',params:item})
+      this.$router.push({name:'bokeDetail',params:{contain:item}})
     }
   },
 }
@@ -107,13 +108,13 @@ export default {
       p{
         font-weight: 600;
         margin-right: 20px;
-        font-size: 15px;
+        font-size: 13px;
       }
     }
   }
   .card_cover{
     width: 100%;
-    height: 250px;
+    height: 150px;
     margin-bottom: 10px;
     img{
       // width: 100%;
@@ -124,6 +125,7 @@ export default {
     }
   }
   .card_introduction{
+    padding-top: 5px;
     width: 100%;
     height: 60px;
     p{
@@ -156,5 +158,9 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 60px;
+  border: 1px solid #e9e9e9;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px 0px #e4e4e4;
+  padding: 6px 0px;
 }
 </style>

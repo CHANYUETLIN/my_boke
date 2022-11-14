@@ -1,5 +1,6 @@
 <template>
-  <div style="padding:20px">
+  <div style="padding:20px;background: rgb(238, 238, 238);">
+    <ctab :breadcrumb="breadcrumb"></ctab>
     <div class="head">{{detailData.title}}</div>
     <div class="dd">
       <p>发布人 : {{detailData.username}}</p>
@@ -8,7 +9,8 @@
       <p>浏览量 : {{detailData.views}}</p>
     </div>
     <div class="contain">
-      <div v-html="detailData.contain"></div>
+      <div v-highlight class="markdown-body" v-html="detailData.contain"></div>
+      
       <div class="dianzan">
         <img @click="dianzan" :class="dz?'animate':'img'" ref="dianzan" src="../../assets/image/details/tubiaozhizuomoban.png" alt="">
         <img v-if="dz" @click="dianzan" :class="dz?'animate2':'img2'" src="../../assets/image/details/dianzan.png" alt="">
@@ -69,6 +71,7 @@
 </template>
 
 <script>
+
 export default {
   name:'bokeDetail',
   data() {
@@ -81,6 +84,7 @@ export default {
       commentsData:[],
       onecommentsContain:'',
       card_id:0,
+      breadcrumb:[{name:'文章详情',path:''}],
     }
   },
   mounted(){
@@ -89,7 +93,11 @@ export default {
   created(){
     this.myLogin = JSON.parse(sessionStorage.getItem('login'))
     this.myHeadimg = this.myLogin.imgurl
-    this.detailData = this.$route.params
+    this.detailData = this.$route.params.contain
+    console.log(this.$route.params,'this.$route.params.page')
+    if(this.$route.params.page){
+      this.breadcrumb.unshift({name:'文章管理',path:'/development?indexShow=1-2'})
+    }
     this.articleviews()
     this.getcommentsData()
   },
@@ -229,7 +237,7 @@ export default {
   display: flex;
   width: 100%;
   height: 40px;
-  background: rgb(248, 248, 248);
+  background: rgb(255, 255, 255);
   align-items: center;
   padding: 0 20px;
   margin-bottom: 20px;
@@ -240,8 +248,9 @@ export default {
   }
 }
 .contain{
+  background: #fff;
   padding: 20px;
-  box-shadow: 0 0 10px 1px rgb(239, 239, 239);
+  box-shadow: 0 0 10px 2px #dadada;
   min-height: 80vh;
   .dianzan{
     width: 100%;
@@ -530,6 +539,10 @@ export default {
       }
     }
     
+  }
+  .markdown-body .highlight pre, .markdown-body pre{
+    font-size: 92%;
+    background-color: #201d1f;
   }
 }
 

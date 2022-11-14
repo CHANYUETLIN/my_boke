@@ -47,43 +47,57 @@
         </div>
         <el-button size="mini" @click="searchData">搜索</el-button>
       </div>
-      <el-table
-        :data="ImgtableData"
-        border
-        height="500"
-        style="width: 100%">
-        <el-table-column fixed prop="" label="序号" width="80">
-          <template slot-scope="scope">
-            {{scope.$index + 1}}
-          </template>
-        </el-table-column>
-        <el-table-column
-          min-width="400"
-          v-for="(item,index) in ImgHeader" 
-          :key="index"
-          :minWidth="item.width"
-          :prop="item.prop"
-          :label="item.name">
-          <template slot-scope="scope">
-            <img v-if="item.prop=='image'" :src="scope.row.imgurl" alt="" style="width:55px;height:55px;overflow:hidden">
-            <span v-if="item.prop=='bShow'">
-              {{scope.row.bShow == 'true'?'是':'否'}}
-            </span>
-            <span v-else>
-              {{scope.row[item.prop]}}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          fixed="right"
-          label="操作"
-          width="100">
-          <template slot-scope="scope">
-            <el-button @click="showImg(scope.row)" type="text" size="small">查看</el-button>
-            <el-button @click="deleteImg(scope.row,scope.$index)" type="text" size="small">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div class="tablebc">
+        <el-table
+          :data="ImgtableData"
+          :header-row-style="{color:'#555',fontSize:'14px'}"
+          :header-cell-style="{background:'rgb(248,248,248)'}"
+          :row-style="{height: '20px'}"
+          border
+          height="410"
+          style="width: 100%">
+          <el-table-column fixed prop="" label="序号" width="80">
+            <template slot-scope="scope">
+              {{scope.$index + 1}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="400"
+            v-for="(item,index) in ImgHeader" 
+            :key="index"
+            :minWidth="item.width"
+            :prop="item.prop"
+            :label="item.name">
+            <template slot-scope="scope">
+              <img v-if="item.prop=='image'" :src="scope.row.imgurl" alt="" style="width:55px;height:55px;overflow:hidden">
+              <span v-if="item.prop=='bShow'">
+                <!-- {{scope.row.bShow == 'true'?'是':'否'}} -->
+                <el-tooltip :content="scope.row.bShow == 'true'?'是':'否'" placement="top">
+                  <el-switch
+                    v-model="scope.row.bShow"
+                    @change="changebShow(scope.row,scope.$index)"
+                    active-value="true"
+                    inactive-value="false">
+                  </el-switch>
+                </el-tooltip>
+              </span>
+              <span v-else>
+                {{scope.row[item.prop]}}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <el-button @click="showImg(scope.row)" type="text" size="small">查看</el-button>
+              <!-- <el-button @click="deleteImg(scope.row,scope.$index)" type="text" size="small">删除</el-button> -->
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      
     </div>
     <el-dialog
       title="查看图片"
@@ -149,17 +163,26 @@ export default {
       this.centerDialogVisible = true
       this.showBigImg = val.imgurl
     },
+    // 修改首页轮播图是否显示
+    changebShow(val,index){
+      this.$axios.post(`development/changeImageTableData`,val).then(res=>{
+        if(res.data.code == '200'){
+          this.$message.success("更改成功")
+        }
+      })
+    },
     // 删除数据
     deleteImg(val,index){
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将取消显示该图片, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post('development/deleteImageTableData',val).then(res=>{
+        this.$axios.post('development/changeImageTableData',val).then(res=>{
           if(res.data.code == '200'){
-            this.$message.success("删除成功")
-            this.ImgtableData.splice(index,1)
+            this.$message.success("取消成功")
+            // this.ImgtableData.splice(index,1)
+            this.getTableData()
           }
         })
       }).catch(() => {
@@ -222,6 +245,12 @@ export default {
       margin-right: 20px;
     }
   }
+}
+.tablebc{
+  width: 100%;
+  padding: 10px;    
+  border-radius: 5px;
+  box-shadow: 0px 0px 7px 0px #dadada;
 }
 /deep/ .el-dialog__body{
   display: flex;

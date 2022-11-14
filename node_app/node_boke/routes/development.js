@@ -88,20 +88,20 @@ router.get('/getImageTableData',(req,res)=>{
   });
 })
 
-// 删除图片数据（根据图片路径删除该行数据）
-router.post('/deleteImageTableData',(req,res)=>{
+// 处理图片显示数据（根据图片路径显示或隐藏该行数据）
+router.post('/changeImageTableData',(req,res)=>{
   let data = req.body
   connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
-      connection.query(`UPDATE bannerimg SET bShow = "false" WHERE imgurl = "${data.imgurl}"`,(err,res1)=>{
+      connection.query(`UPDATE bannerimg SET bShow = "${data.bShow}" WHERE imgurl = "${data.imgurl}"`,(err,res1)=>{
         if(err){
           console.log("数据库查询失败")
         }else{
           res.send({
             code:'200',
-            msg:'删除成功'
+            msg:'更改成功'
           })
         }
       })
@@ -226,5 +226,55 @@ router.post('/updateUserDechema',(req,res)=>{
     con.release() // 释放连接
   })
 })
+
+
+/**
+ * 书签管理
+ */
+// 新建(保存)书签
+router.post('/InsertTagTable',(req,res)=>{
+  let data = req.body
+  console.log(data,'data')
+  connection.getConnection(function(err,con) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`INSERT INTO tagtable (tagName,tagKey,bShow) VALUES ('${data.tagName}','${data.tagKey}','${data.bShow}');`,(err,res1)=>{
+        if(err){
+          console.log("数据库查询失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:'新建成功',
+          })
+        }
+      })
+    }
+    con.release() // 释放连接
+  });
+})
+
+// 更新书签状态
+router.post('/UpDateTagTable',(req,res)=>{
+  let data = req.body
+  connection.getConnection(function(err,con) {
+    if(err) console.log('与MySQL数据库建立连接失败。');
+    else{
+      console.log('与MySQL数据库建立连接成功。');
+      connection.query(`UPDATE tagtable SET bShow = "${data.bShow}" WHERE id = "${data.id}"`,(err,res1)=>{
+        if(err){
+          console.log("数据库查询失败")
+        }else{
+          res.send({
+            code:'200',
+            msg:'更改成功'
+          })
+        }
+      })
+    }
+    con.release() // 释放连接
+  });
+})
+
 
 module.exports = router;
