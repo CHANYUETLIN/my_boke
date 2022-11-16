@@ -156,11 +156,17 @@ router.get('/getTagData',(req,res)=>{
 
 // 获取文章内容(查询card表bShow为true的)
 router.get('/getCardData',(req,res)=>{
+  let sql = ''
+  if(req.query.tagKey == 'all'){
+    sql = `SELECT * FROM card WHERE bShow='true'`
+  }else{
+    sql = `SELECT * FROM card WHERE bShow='true' AND types='${req.query.tagKey}'`
+  }
   connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
-      connection.query(`SELECT * FROM card WHERE bShow='true'`,(err,res1)=>{
+      connection.query(`${sql}`,(err,res1)=>{
         if(err){
           console.log("数据库查询失败")
         }else{

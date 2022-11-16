@@ -7,6 +7,8 @@ import userInfo from '../view/login/userInfo.vue'
 import development from '../view/backStage/development.vue'
 import articla from '../view/article/writeArticla.vue'
 import bokeDetail from '../view/article/bokeDetail.vue'
+import test from '../view/webStudyDedicated/test.vue'
+
 
 
 Vue.use(Router)
@@ -48,6 +50,11 @@ export default new Router({
       path: '/bokeDetail',
       name: 'bokeDetail',
       component: bokeDetail,
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: test,
     },
   ]
 })

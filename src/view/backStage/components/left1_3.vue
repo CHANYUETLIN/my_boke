@@ -75,7 +75,6 @@ export default {
           item.bEditItem = false
         });
         this.tableData = data
-        console.log(this.tableData,'tableData')
       })
     },
     // 新建一个tag标签

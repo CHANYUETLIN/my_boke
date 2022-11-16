@@ -38,18 +38,23 @@
           <div class="weather">
             <div id="he-plugin-standard"></div>
           </div>
-          <el-carousel :interval="2000" type="card" height="250px" v-if="carouselList.length">
+          <el-carousel :interval="2000" type="card" height="150px" v-if="carouselList.length">
             <el-carousel-item v-for="(item,index) in carouselList" :key="index">
               <img style="width:100%;height:100%" :src="item.imgurl" alt="">
             </el-carousel-item>
           </el-carousel>
-          <el-carousel :interval="2000" type="card" height="250px" v-else>
+          <el-carousel :interval="2000" type="card" height="150px" v-else>
             <el-carousel-item v-for="item in 6" :key="item">
               {{item}}
             </el-carousel-item>
           </el-carousel>
         </div>
         <div class="middle">
+          <div class="middle_tag">
+            <ul>
+              <li :class="item.bChecked?'lic':'linc'" @click="chooseTag(item)" v-for="(item,index) in tagData" :key="index">{{item.tagName}}</li>
+            </ul>
+          </div>
           <card v-if="cardData.length" :cardData="cardData"></card>
         </div>
         <div class="left">
@@ -74,6 +79,7 @@ export default {
       imageUrl:'', // 头像
       carouselList:[], // 轮播图图片
       cardData:[], // 中间card展示
+      tagData:[], // tag数据
     };
   },
   watch: {
@@ -142,7 +148,7 @@ export default {
       window.WIDGET = {
         "CONFIG": {
           "layout": "2",
-          "width": 340,
+          "width": 285,
           "height": 340,
           "borderRadius": "5",
           "background": "1",
@@ -168,8 +174,9 @@ export default {
       })(document)
     },
     // 获取文章内容
-    getCardDataList(){
-      this.$axios.get('articla/getCardData').then(res=>{
+    getCardDataList(params){
+      this.cardData = []
+      this.$axios.get(`articla/getCardData?tagKey=${params}`).then(res=>{
         // 按照时间倒叙排列
         this.cardData = this.$dataBind.sortBy(res.data.msg,'updateTime','desc') 
       })
@@ -178,12 +185,36 @@ export default {
     markDown(){
       this.$router.push('/articla')
     },
+    // 获取tag标签
+    getTagData(){
+      this.$axios.get('articla/getTagData').then(res=>{
+        let resData = res.data.msg
+        resData.forEach(item => {
+          item.bChecked = false
+          this.tagData.push(item)
+        });
+        this.tagData.unshift({
+          tagName:'全部',
+          tagKey:'all',
+          bShow:1,
+          bChecked:true
+        })
+      })
+    },
+    chooseTag(row){
+      this.tagData.forEach(item => {
+        item.bChecked = false
+      });
+      row.bChecked = true
+      this.getCardDataList(row.tagKey)
+    },
   },
   created() {
     this.showLogin()
     this.getCarouselList()
     this.getWeather()
-    this.getCardDataList()
+    this.getCardDataList('all')
+    this.getTagData()
   },
   mounted() {
     
@@ -193,7 +224,7 @@ export default {
 <style lang="scss" scoped>
 .header{
   width: 100%;
-  height: 400px;
+  height: 370px;
   background: rgb(219, 219, 255);
   background-image: url('../../assets/home/banner04.png');
   background-repeat:no-repeat;
@@ -309,14 +340,14 @@ export default {
     }
   }
   .contain{
-    min-height: 1300px;
+    // min-height: 1300px;
     // background: rgb(213, 255, 227);
     padding: 40px 40px 30px 40px;
     display: flex;
     justify-content: space-between;
     // align-items: center;
     .right{
-      width: 25%;
+      width: 20%;
       // background: rgb(227, 255, 227);
       margin: 0 10px;
       border: 1px dotted #9dbaf278;
@@ -332,6 +363,34 @@ export default {
       border: 1px dotted #9dbaf278;
       padding: 20px;
       margin: 0 20px;
+      .middle_tag{
+        width: 100%;
+        height: 40px;
+        background: #ffffff;
+        margin-bottom: 20px;
+        box-shadow: 0 0 6px 1px #e7e7e7;
+        ul{
+          display: flex;
+          align-items: center;
+          height: 40px;
+          li{
+            margin: 0 6px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+          }
+          .lic{
+            color:#ffd5dc;
+            font-size: 15px;
+            background: #000;
+          }
+          .linc{
+            color: rgb(76, 76, 76);
+            font-size: 15px;
+          }
+        }
+      }
     }
     .left{
       width: 15%;

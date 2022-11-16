@@ -69,7 +69,11 @@ export default {
     },
     // 跳转至博客详情页面
     cardDetail(item){
-      console.log(item,'item')
+      console.log(sessionStorage.getItem('login'),item,'item')
+      if(!sessionStorage.getItem('login')){
+        this.$message.error('请登录后访问')
+        return ''
+      }
       this.$router.push({name:'bokeDetail',params:{contain:item}})
     }
   },
@@ -162,5 +166,14 @@ export default {
   border-radius: 5px;
   box-shadow: 0px 1px 5px 0px #e4e4e4;
   padding: 6px 0px;
+}
+/deep/ .el-pagination.is-background .el-pager li:not(.disabled).active{
+  background-color: #25282b;
+  color: #ffc8fc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+/deep/ .el-pagination.is-background .el-pager li:not(.disabled):hover{
+  color: #ffc8fc;
 }
 </style>

@@ -88,7 +88,7 @@ export default {
 </script>
 <style scoped lang="scss">
 .body{
-  background: rgb(238, 238, 238);
+  background: rgb(245, 245, 245);
   position: absolute;
   top: 0;
   bottom: 0;

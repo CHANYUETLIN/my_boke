@@ -1,10 +1,10 @@
 <template>
-  <div style="padding:20px;background: rgb(238, 238, 238);">
+  <div style="padding:20px;background: rgb(245, 245, 245);">
     <ctab :breadcrumb="breadcrumb"></ctab>
     <div class="head">{{detailData.title}}</div>
     <div class="dd">
       <p>发布人 : {{detailData.username}}</p>
-      <p>发布时间 : {{detailData.updateTime}}</p>
+      <p>发布时间 : {{this.$dataBind.timeago(new Date(detailData.updateTime))}}</p>
       <p>点赞量 : {{detailData.likes}}</p>
       <p>浏览量 : {{detailData.views}}</p>
     </div>
@@ -540,10 +540,11 @@ export default {
     }
     
   }
-  .markdown-body .highlight pre, .markdown-body pre{
-    font-size: 92%;
-    background-color: #201d1f;
-  }
 }
+
+  /deep/ pre{
+    font-size: 92%;
+    background-color: #161415 !important;
+  }
 
 </style>
