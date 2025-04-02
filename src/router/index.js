@@ -8,6 +8,10 @@ import development from '../view/backStage/development.vue'
 import articla from '../view/article/writeArticla.vue'
 import bokeDetail from '../view/article/bokeDetail.vue'
 import test from '../view/webStudyDedicated/test.vue'
+import gamesIndex from '../view/games/gamesIndex.vue'
+import gameLogin from '../view/games/gameLogin/login.vue'
+import gameRegister from '../view/games/gameLogin/register.vue'
+import gameUserInfo from '../view/games/gameUserInfo/userInfo.vue'
 
 
 
@@ -55,6 +59,26 @@ export default new Router({
       path: '/test',
       name: 'test',
       component: test,
+    },
+    {
+      path: '/gamesIndex',
+      name: 'gamesIndex',
+      component: gamesIndex,
+    },
+    {
+      path: '/gamesIndex/gameLogin',
+      name: 'gameLogin',
+      component: gameLogin,
+    },
+    {
+      path: '/gamesIndex/gameRegister',
+      name: 'gameRegister',
+      component: gameRegister,
+    },
+    {
+      path: '/gamesIndex/gameUserInfo',
+      name: 'gameUserInfo',
+      component: gameUserInfo,
     },
   ]
 })

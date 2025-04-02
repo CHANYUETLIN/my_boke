@@ -261,7 +261,7 @@ router.post('/UpDateTagTable',(req,res)=>{
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
       console.log('与MySQL数据库建立连接成功。');
-      connection.query(`UPDATE tagtable SET bShow = "${data.bShow}" WHERE id = "${data.id}"`,(err,res1)=>{
+      connection.query(`UPDATE tagtable SET bShow="${data.bShow}",tagName="${data.tagName}" WHERE id = "${data.id}"`,(err,res1)=>{
         if(err){
           console.log("数据库查询失败")
         }else{

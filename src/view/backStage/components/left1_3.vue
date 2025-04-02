@@ -94,7 +94,6 @@ export default {
     },
     // 保存
     saveCard(val,index){
-      console.log(val,'val')
       if(val.bNewAdd){
         this.$dataBind.saveCard(`development/InsertTagTable`,val,this)
       }else{

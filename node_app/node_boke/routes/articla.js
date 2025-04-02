@@ -35,7 +35,7 @@ router.post('/publish',(req,res)=>{
   connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
-      console.log('与MySQL数据库建立连接成功。');
+      console.log('与MySQL数据库建立连接成功。publish');
       // 当前时间
       let a = new Date()
       let dateTime = "yyyy-MM-dd"
@@ -78,7 +78,7 @@ router.post('/updateArticle',(req,res)=>{
   connection.getConnection(function(err,con) {
     if(err) console.log('与MySQL数据库建立连接失败。');
     else{
-      console.log('与MySQL数据库建立连接成功。');
+      console.log('与MySQL数据库建立连接成功。updateArticle');
       // 当前时间
       let a = new Date()
       let dateTime = "yyyy-MM-dd"

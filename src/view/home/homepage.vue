@@ -24,9 +24,18 @@
               </ul>
             </div>
           </div>
-          
+
           <p >hello : <span>{{loginInfo.username}}</span></p>
         </div>
+      </div>
+      <div class="header_contain">
+        <ul>
+          <div v-for="(item,index) in headerData" :key="index">
+            <el-tooltip class="item" effect="dark" :content="`点击跳转至站内${item.name}`" placement="top">
+              <li>{{item.name}}</li>
+            </el-tooltip>
+          </div>
+        </ul>
       </div>
     </div>
     <div class="content">
@@ -80,18 +89,19 @@ export default {
       carouselList:[], // 轮播图图片
       cardData:[], // 中间card展示
       tagData:[], // tag数据
+      headerData:[{name:'H5',path:'',},]
     };
   },
   watch: {
-    
+
   },
   computed: {
   },
   methods: {
     ceshi(){
-      let arr = [{}]
-      arr[0].bEdit = '123'
-      console.log(arr)
+      this.$router.push({
+        name:'gamesIndex'
+      })
     },
     login(){
       this.$router.push('/login')
@@ -178,7 +188,7 @@ export default {
       this.cardData = []
       this.$axios.get(`articla/getCardData?tagKey=${params}`).then(res=>{
         // 按照时间倒叙排列
-        this.cardData = this.$dataBind.sortBy(res.data.msg,'updateTime','desc') 
+        this.cardData = this.$dataBind.sortBy(res.data.msg,'updateTime','desc')
       })
     },
     // 编写文章
@@ -217,7 +227,7 @@ export default {
     this.getTagData()
   },
   mounted() {
-    
+
   }
 };
 </script>
@@ -232,13 +242,15 @@ export default {
   border-bottom-left-radius:10px;
   border-bottom-right-radius:10px;
   box-shadow: 0px 0px 10px 3px #f9d1d8;
+  position: relative;
   .header_title{
-    height: 60px;
+    height: 50px;
     background: #ffffff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 5px 40px;
+    transition: 0.16s;
     // border-bottom-left-radius:10px;
     // border-bottom-right-radius:10px;
     // opacity: 0;
@@ -312,13 +324,29 @@ export default {
         }
       }
     }
-    
+
   }
   .header_title:hover{
     height: 60px;
     background: rgb(255, 255, 255);
     // background: rgba(255,255,255,0.3);
-    transition: 0.25s;
+  }
+  .header_contain{
+    position: absolute;
+    width: 140px;
+    background: #efccd2;
+    right: 400px;
+    top: 80px;
+    ul{
+      li{
+        font-size: 15px;
+        font-weight: 600;
+        color: #ff617b;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+      }
+    }
   }
 }
 .content{
@@ -359,7 +387,7 @@ export default {
     .middle{
       width: 60%;
       // background: rgb(255, 254, 222);
-      
+
       border: 1px dotted #9dbaf278;
       padding: 20px;
       margin: 0 20px;

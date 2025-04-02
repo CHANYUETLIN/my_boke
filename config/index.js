@@ -13,14 +13,14 @@ module.exports = {
     proxyTable: {},
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps
      */
@@ -66,11 +66,12 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
   },
+  // 访问的后端地址
   devServer:{
 		proxy:{
 			//为所有的服务器接口起一个别名前缀，为了和vue脚手架中其他页面的路由地址区分
 			'/api':{
-				target:'http://localhost:8888/',//自己的服务器端口8888
+				target:'http://192.168.0.13:8888/',//自己的服务器端口8888
 				changeOrigin:true, //打开跨域
 				pathRewrite:{
 					"^/api":""

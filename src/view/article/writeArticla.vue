@@ -174,8 +174,9 @@ export default {
 
   created() {
     this.bNewAdd = true
+    console.log(this.$route.params,'this.$route.params')
     // 如果是从文章管理中跳转过来想要修改页面内容的
-    if(this.$route.params){
+    if(Object.keys(this.$route.params).length){
       this.bNewAdd = false
       let data = this.$route.params
       console.log(data,'data')
@@ -269,6 +270,7 @@ export default {
         isDraft:0 // 是否是草稿
       }
       // 如果是新建的markdown，则直接调用保存新的文章接口
+      console.log(this.bNewAdd,'bNewAdd')
       if(this.bNewAdd){
         this.$axios.post("articla/publish",params).then(res=>{
           if(res.data.code == '200'){
